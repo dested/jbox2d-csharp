@@ -24,19 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.broadphase.BroadPhase;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.collision.shapes.MassData;
-using org.jbox2d.collision.shapes.Shape;
-using org.jbox2d.collision.shapes.ShapeType;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.contacts.Contact;
-using org.jbox2d.dynamics.contacts.ContactEdge;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision.broadphase;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;/**
  * A fixture is used to attach a shape to a body for collision detection. A fixture inherits its
  * transform from its parent. Fixtures hold additional non-geometric data such as friction,
  * collision filters, etc. Fixtures are created via Body::CreateFixture.
@@ -195,7 +183,6 @@ public class Fixture {
   }
 
   public void setDensity(float density) {
-    assert (density >= 0f);
     m_density = density;
   }
 
@@ -298,7 +285,6 @@ public class Fixture {
    * @return
    */
   public AABB getAABB(int childIndex) {
-    assert (childIndex >= 0 && childIndex < m_proxyCount);
     return m_proxies[childIndex].aabb;
   }
 
@@ -341,13 +327,13 @@ public class Fixture {
       }
     }
 
-    if (m_proxies.length < childCount) {
+    if (m_proxies.Length < childCount) {
       FixtureProxy[] old = m_proxies;
-      int newLen = MathUtils.max(old.length * 2, childCount);
+      int newLen = MathUtils.max(old.Length * 2, childCount);
       m_proxies = new FixtureProxy[newLen];
-      Array.Copy(old, 0, m_proxies, 0, old.length);
+      Array.Copy(old, 0, m_proxies, 0, old.Length);
       for (int i = 0; i < newLen; i++) {
-        if (i >= old.length) {
+        if (i >= old.Length) {
           m_proxies[i] = new FixtureProxy();
         }
         m_proxies[i].fixture = null;
@@ -361,7 +347,6 @@ public class Fixture {
 
   public void destroy() {
     // The proxies must be destroyed before calling this.
-    assert (m_proxyCount == 0);
 
     // Free the child shape.
     m_shape = null;
@@ -374,7 +359,6 @@ public class Fixture {
 
   // These support body activation/deactivation.
   public void createProxies(BroadPhase broadPhase,  Transform xf) {
-    assert (m_proxyCount == 0);
 
     // Create proxies in the broad-phase.
     m_proxyCount = m_shape.getChildCount();

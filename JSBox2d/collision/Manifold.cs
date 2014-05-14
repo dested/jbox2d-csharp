@@ -24,9 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-/**
+using org.jbox2d.common;using org.jbox2d.common;/**
  * A manifold for two touching convex shapes. Box2D supports multiple types of contact:
  * <ul>
  * <li>clip point versus plane with radius</li>
@@ -48,12 +46,15 @@ using org.jbox2d.common.Vec2;
  * critical for continuous physics. All contact scenarios must be expressed in one of these types.
  * This structure is stored across time steps, so we keep it small.
  */
-namespace org.jbox2d.collision {
+namespace org.jbox2d.collision
+{
+    public enum ManifoldType
+    {
+        CIRCLES, FACE_A, FACE_B
+    }
+
 public class Manifold {
 
-  public  enum ManifoldType {
-    CIRCLES, FACE_A, FACE_B
-  }
 
   /** The points of contact. */
   public readonly ManifoldPoint[] points;

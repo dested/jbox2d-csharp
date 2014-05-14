@@ -24,14 +24,7 @@
 
 
 using System;
-using org.jbox2d.callbacks.ContactFilter;
-using org.jbox2d.callbacks.ContactListener;
-using org.jbox2d.callbacks.PairCallback;
-using org.jbox2d.collision.broadphase.BroadPhase;
-using org.jbox2d.collision.broadphase.BroadPhaseStrategy;
-using org.jbox2d.dynamics.contacts.Contact;
-using org.jbox2d.dynamics.contacts.ContactEdge;
-/**
+using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.collision.broadphase;using org.jbox2d.collision.broadphase;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;/**
  * Delegate of World.
  * 
  * @author Daniel Murphy

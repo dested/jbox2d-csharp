@@ -28,21 +28,29 @@
  * Java note: at the "creation" of each node, a random key is given to that node, and that's what we
  * sort from.
  */
+
+using System;
+
 namespace org.jbox2d.collision.broadphase {
 public class Pair : IComparable<Pair> {
   public int proxyIdA;
   public int proxyIdB;
 
-  public int compareTo(Pair pair2) {
-    if (this.proxyIdA < pair2.proxyIdA) {
-      return -1;
-    }
 
-    if (this.proxyIdA == pair2.proxyIdA) {
-      return proxyIdB < pair2.proxyIdB ? -1 : proxyIdB == pair2.proxyIdB ? 0 : 1;
-    }
+  public int CompareTo(Pair pair2)
+  {
+      if (this.proxyIdA < pair2.proxyIdA)
+      {
+          return -1;
+      }
 
-    return 1;
-  }
+      if (this.proxyIdA == pair2.proxyIdA)
+      {
+          return proxyIdB < pair2.proxyIdB ? -1 : proxyIdB == pair2.proxyIdB ? 0 : 1;
+      }
+
+      return 1;
+
+    }
 }
 }

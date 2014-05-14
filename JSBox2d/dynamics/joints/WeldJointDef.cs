@@ -23,11 +23,7 @@
  ******************************************************************************/
 
 using System;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.joints.JointDef;
-using org.jbox2d.dynamics.joints.JointType;
-/**
+using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics.joints;using org.jbox2d.dynamics.joints;/**
  * Created at 3:38:52 AM Jan 15, 2011
  */
 

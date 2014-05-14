@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.dynamics.Body;
-
+using org.jbox2d.dynamics;
 /**
  * A joint edge is used to connect bodies and joints together
  * in a joint graph where each body is a node and each joint

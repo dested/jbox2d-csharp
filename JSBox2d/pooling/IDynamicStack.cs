@@ -24,7 +24,7 @@
 
 
 /**
- * Same functionality of a regular java.util stack.  Object
+ * Same functionality of a regular java.util stack.  object
  * return order does not matter.
  * @author Daniel
  *
@@ -32,18 +32,14 @@
  */
 namespace org.jbox2d.pooling {
 public interface IDynamicStack<E> {
-
-	/**
+/**
 	 * Pops an item off the stack
 	 * @return
 	 */
-	public E pop();
-
-	/**
+	E pop();/**
 	 * Pushes an item back on the stack
 	 * @param argObject
 	 */
-	public void push(E argObject);
-
+	void push(E argObject);
 }
 }

@@ -24,9 +24,7 @@
 
 
 using System;
-using org.jbox2d.dynamics.contacts.Position;
-using org.jbox2d.dynamics.contacts.Velocity;
-namespace org.jbox2d.dynamics {
+using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;namespace org.jbox2d.dynamics {
 public class SolverData {
   public TimeStep step;
   public Position[] positions;

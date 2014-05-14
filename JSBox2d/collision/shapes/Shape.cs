@@ -24,12 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;/**
  * A shape is used for collision detection. You can create a shape however you like. Shapes used for
  * simulation in World are created automatically when a Fixture is created. Shapes may encapsulate a
  * one or more child shapes.

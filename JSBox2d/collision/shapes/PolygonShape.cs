@@ -24,17 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.pooling.arrays.IntArray;
-using org.jbox2d.pooling.arrays.Vec2Array;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.pooling.arrays;using org.jbox2d.pooling.arrays;/**
  * A convex polygon shape. Polygons have a maximum number of vertices equal to _maxPolygonVertices.
  * In most cases you should not need many vertices for a convex polygon.
  */
@@ -49,13 +39,13 @@ public class PolygonShape : Shape {
   public readonly Vec2 m_centroid = new Vec2();
 
   /**
-   * The vertices of the shape. Note: use getVertexCount(), not m_vertices.length, to get number of
+   * The vertices of the shape. Note: use getVertexCount(), not m_vertices.Length, to get number of
    * active vertices.
    */
   public readonly Vec2 [] m_vertices;
 
   /**
-   * The normals of the shape. Note: use getVertexCount(), not m_normals.length, to get number of
+   * The normals of the shape. Note: use getVertexCount(), not m_normals.Length, to get number of
    * active normals.
    */
   public readonly Vec2 []m_normals;
@@ -72,26 +62,26 @@ public class PolygonShape : Shape {
   private readonly Vec2 pool4 = new Vec2();
   private Transform poolt1 = new Transform();
 
-  public PolygonShape() {
-    super(ShapeType.POLYGON);
+  public PolygonShape():base(ShapeType.POLYGON) {
+    
 
     m_count = 0;
     m_vertices = new Vec2[Settings.maxPolygonVertices];
-    for (int i = 0; i < m_vertices.length; i++) {
+    for (int i = 0; i < m_vertices.Length; i++) {
       m_vertices[i] = new Vec2();
     }
     m_normals = new Vec2[Settings.maxPolygonVertices];
-    for (int i = 0; i < m_normals.length; i++) {
+    for (int i = 0; i < m_normals.Length; i++) {
       m_normals[i] = new Vec2();
     }
     setRadius(Settings.polygonRadius);
     m_centroid.setZero();
   }
 
-  public  Shape clone() {
+  public override  Shape clone() {
     PolygonShape shape = new PolygonShape();
     shape.m_centroid.set(this.m_centroid);
-    for (int i = 0; i < shape.m_normals.length; i++) {
+    for (int i = 0; i < shape.m_normals.Length; i++) {
       shape.m_normals[i].set(m_normals[i]);
       shape.m_vertices[i].set(m_vertices[i]);
     }
@@ -122,7 +112,6 @@ public class PolygonShape : Shape {
    */
   public  void set( Vec2[] verts,  int num,  Vec2Array vecPool,
        IntArray intPool) {
-    assert (3 <= num && num <= Settings.maxPolygonVertices);
     if (num < 3) {
       setAsBox(1.0f, 1.0f);
       return;
@@ -205,8 +194,6 @@ public class PolygonShape : Shape {
        int i1 = i;
        int i2 = i + 1 < m_count ? i + 1 : 0;
       edge.set(m_vertices[i2]).subLocal(m_vertices[i1]);
-
-      assert (edge.lengthSquared() > Settings.EPSILON * Settings.EPSILON);
       Vec2.crossToOutUnsafe(edge, 1f, m_normals[i]);
       m_normals[i].normalize();
     }
@@ -265,7 +252,8 @@ public class PolygonShape : Shape {
     }
   }
 
-  public int getChildCount() {
+  public override int getChildCount()
+  {
     return 1;
   }
 
@@ -348,12 +336,11 @@ public class PolygonShape : Shape {
    * @return
    */
   public  Vec2 getVertex( int index) {
-    assert (0 <= index && index < m_count);
     return m_vertices[index];
   }
 
   
-  public  override bool raycast(RayCastOutput out_put, RayCastInput input, Transform xf,
+  public  override bool raycast(RayCastOutput output, RayCastInput input, Transform xf,
       int childIndex) {
      Rot xfq = xf.q;
      Vec2 xfp = xf.p;
@@ -415,13 +402,11 @@ public class PolygonShape : Shape {
       }
     }
 
-    assert (0.0f <= lower && lower <= input.maxFraction);
-
     if (index >= 0) {
-      out_put.fraction = lower;
+      output.fraction = lower;
       // normal = Mul(xf.R, m_normals[index]);
       Vec2 normal = m_normals[index];
-      Vec2 out_ = out_put.normal;
+      Vec2 out_ = output.normal;
       out_.x = xfq.c * normal.x - xfq.s * normal.y;
       out_.y = xfq.s * normal.x + xfq.c * normal.y;
       return true;
@@ -430,7 +415,6 @@ public class PolygonShape : Shape {
   }
 
   public  void computeCentroidToOut( Vec2[] vs,  int count,  Vec2 out_) {
-    assert (count >= 3);
 
     out_.set(0.0f, 0.0f);
     float area = 0.0f;
@@ -464,12 +448,12 @@ public class PolygonShape : Shape {
       out_.addLocal(e1);
     }
 
-    // Centroid
-    assert (area > Settings.EPSILON);
+    // Centroid 
     out_.mulLocal(1.0f / area);
   }
 
-  public void computeMass( MassData massData, float density) {
+  public override void computeMass(MassData massData, float density)
+  {
     // Polygon mass, centroid, and inertia.
     // Let rho be the polygon density in mass per unit area.
     // Then:
@@ -493,8 +477,7 @@ public class PolygonShape : Shape {
     // Simplification: triangle centroid = (1/3) * (p1 + p2 + p3)
     //
     // The rest of the derivation is handled by computer algebra.
-
-    assert (m_count >= 3);
+       
 
      Vec2 center = pool1;
     center.setZero();
@@ -542,8 +525,7 @@ public class PolygonShape : Shape {
     // Total mass
     massData.mass = density * area;
 
-    // Center of mass
-    assert (area > Settings.EPSILON);
+    // Center of mass 
     center.mulLocal(1.0f / area);
     massData.center.set(center).addLocal(s);
 

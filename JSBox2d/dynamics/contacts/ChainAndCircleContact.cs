@@ -24,26 +24,18 @@
 
 
 using System;
-using org.jbox2d.collision.Manifold;
-using org.jbox2d.collision.shapes.ChainShape;
-using org.jbox2d.collision.shapes.CircleShape;
-using org.jbox2d.collision.shapes.EdgeShape;
-using org.jbox2d.collision.shapes.ShapeType;
-using org.jbox2d.common.Transform;
-using org.jbox2d.dynamics.Fixture;
-using org.jbox2d.pooling.IWorldPool;
-namespace org.jbox2d.dynamics.contacts {
+using org.jbox2d.collision;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;namespace org.jbox2d.dynamics.contacts {
 public class ChainAndCircleContact : Contact {
 
-  public ChainAndCircleContact(IWorldPool argPool) {
-    super(argPool);
+    public ChainAndCircleContact(IWorldPool argPool)
+        : base(argPool)
+    {
+    
   }
 
   
-  public override void init(Fixture fA, int indexA, Fixture fB, int indexB) {
-    super.init(fA, indexA, fB, indexB);
-    assert (m_fixtureA.getType() == ShapeType.CHAIN);
-    assert (m_fixtureB.getType() == ShapeType.CIRCLE);
+  public   void init(Fixture fA, int indexA, Fixture fB, int indexB) {
+    base.init(fA, indexA, fB, indexB);
   }
 
   private readonly EdgeShape edge = new EdgeShape();

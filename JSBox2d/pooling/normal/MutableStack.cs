@@ -24,10 +24,9 @@
 
 
 using System;
-using org.jbox2d.pooling.IDynamicStack;
-
+using org.jbox2d.pooling;
 namespace org.jbox2d.pooling.normal {
-public abstract class MutableStack<E> : IDynamicStack   {
+public  class MutableStack<E> : IDynamicStack<E>   {
 
   private object[] stack;
   private int index;
@@ -65,6 +64,7 @@ public abstract class MutableStack<E> : IDynamicStack   {
   }
 
   /** Creates a new instance of the object contained by this stack. */
-  public abstract E newInstance();
+  public Func<E> newInstance;
+
 }
 }

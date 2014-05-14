@@ -47,8 +47,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 // Updated to rev 100
 
 /** This holds the mass data computed for a shape. */

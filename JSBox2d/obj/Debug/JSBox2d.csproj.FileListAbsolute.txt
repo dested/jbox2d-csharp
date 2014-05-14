@@ -1,3 +1,8 @@
 F:\code\JSBox2d\JSBox2d\bin\Debug\JSBox2d.exe.config
 F:\code\JSBox2d\JSBox2d\obj\Debug\JSBox2d.csprojResolveAssemblyReference.cache
 C:\code\github\dested\jbox2d-csharp\JSBox2d\bin\Debug\JSBox2d.exe.config
+C:\code\github\dested\jbox2d-csharp\JSBox2d\obj\Debug\JSBox2d.csprojResolveAssemblyReference.cache
+C:\code\github\dested\jbox2d-csharp\JSBox2d\bin\Debug\JSBox2d.exe
+C:\code\github\dested\jbox2d-csharp\JSBox2d\bin\Debug\JSBox2d.pdb
+C:\code\github\dested\jbox2d-csharp\JSBox2d\obj\Debug\JSBox2d.exe
+C:\code\github\dested\jbox2d-csharp\JSBox2d\obj\Debug\JSBox2d.pdb

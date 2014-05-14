@@ -24,23 +24,16 @@
 
 
 using System;
-using org.jbox2d.collision.Manifold;
-using org.jbox2d.collision.shapes.CircleShape;
-using org.jbox2d.collision.shapes.ShapeType;
-using org.jbox2d.common.Transform;
-using org.jbox2d.dynamics.Fixture;
-using org.jbox2d.pooling.IWorldPool;
-namespace org.jbox2d.dynamics.contacts {
+using org.jbox2d.collision;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;namespace org.jbox2d.dynamics.contacts {
 public class CircleContact : Contact {
 
-  public CircleContact(IWorldPool argPool) {
-    super(argPool);
+    public CircleContact(IWorldPool argPool)
+        : base(argPool)
+    { 
   }
 
   public void init(Fixture fixtureA, Fixture fixtureB) {
-    super.init(fixtureA, 0, fixtureB, 0);
-    assert (m_fixtureA.getType() == ShapeType.CIRCLE);
-    assert (m_fixtureB.getType() == ShapeType.CIRCLE);
+    base.init(fixtureA, 0, fixtureB, 0);
   }
 
   

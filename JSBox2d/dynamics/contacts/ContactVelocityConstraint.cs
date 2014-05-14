@@ -24,10 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-namespace org.jbox2d.dynamics.contacts {
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;namespace org.jbox2d.dynamics.contacts {
 public class ContactVelocityConstraint {
   public VelocityConstraintPoint[] points = new VelocityConstraintPoint[Settings.maxManifoldPoints];
   public readonly Vec2 normal = new Vec2();
@@ -44,12 +41,14 @@ public class ContactVelocityConstraint {
   public int contactIndex;
 
   public ContactVelocityConstraint() {
-    for (int i = 0; i < points.length; i++) {
+    for (int i = 0; i < points.Length; i++) {
       points[i] = new VelocityConstraintPoint();
     }
   }
 
-  public  class VelocityConstraintPoint {
+}
+public class VelocityConstraintPoint
+{
     public readonly Vec2 rA = new Vec2();
     public readonly Vec2 rB = new Vec2();
     public float normalImpulse;
@@ -57,6 +56,6 @@ public class ContactVelocityConstraint {
     public float normalMass;
     public float tangentMass;
     public float velocityBias;
-  }
 }
+
 }

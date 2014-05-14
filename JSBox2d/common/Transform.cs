@@ -95,7 +95,6 @@ public class Transform /* [36,24] expecting: 'extends', 'implements', '{', '<': 
   }
 
   public static void mulToOutUnsafe(Transform T, Vec2 v, Vec2 out_) {
-    assert (v != out_);
     out_.x = (T.q.c * v.x - T.q.s * v.y) + T.p.x;
     out_.y = (T.q.s * v.x + T.q.c * v.y) + T.p.y;
   }
@@ -115,7 +114,6 @@ public class Transform /* [36,24] expecting: 'extends', 'implements', '{', '<': 
   }
   
   public static void mulTransToOutUnsafe(Transform T, Vec2 v, Vec2 out_) {
-    assert(v != out_);
     float px = v.x - T.p.x;
     float py = v.y - T.p.y;
     out_.x = (T.q.c * px + T.q.s * py);

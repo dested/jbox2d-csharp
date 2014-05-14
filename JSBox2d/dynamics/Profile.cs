@@ -39,15 +39,15 @@ public class Profile {
   public float solveTOI;
   
   public void toDebugStrings(IList<string> strings) {
-    strings.add("Profile:");
-    strings.add(" step: " + step);
-    strings.add("  collide: " + collide);
-    strings.add("  solve: " + solve);
-    strings.add("   solveInit: " + solveInit);
-    strings.add("   solveVelocity: " + solveVelocity);
-    strings.add("   solvePosition: " + solvePosition);
-    strings.add("   broadphase: " + broadphase);
-    strings.add("  solveTOI: " + solveTOI);
+    strings.Add("Profile:");
+    strings.Add(" step: " + step);
+    strings.Add("  collide: " + collide);
+    strings.Add("  solve: " + solve);
+    strings.Add("   solveInit: " + solveInit);
+    strings.Add("   solveVelocity: " + solveVelocity);
+    strings.Add("   solvePosition: " + solvePosition);
+    strings.Add("   broadphase: " + broadphase);
+    strings.Add("  solveTOI: " + solveTOI);
   }
 }
 }

@@ -27,9 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Fixture;
-// updated to rev 100;
+using org.jbox2d.common;using org.jbox2d.dynamics;// updated to rev 100;
 /**
  * Callback class for ray casts.
  * See World.rayCast
@@ -37,8 +35,7 @@ using org.jbox2d.dynamics.Fixture;
  */
 namespace org.jbox2d.callbacks {
 public interface RayCastCallback {
-
-	/**
+/**
 	 * Called for each fixture found in the query. You control how the ray cast
 	 * proceeds by returning a float:
 	 * return -1: ignore this fixture and continue
@@ -56,6 +53,5 @@ public interface RayCastCallback {
 	 * @param fraction
 	 * @return
 	 */
-	public float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction);
-}
+	float reportFixture(Fixture fixture, Vec2 point, Vec2 normal, float fraction);}
 }

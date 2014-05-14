@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 // updated to rev 100
 /**
  * Ray-cast output data. The ray hits at p1 + fraction * (p2 - p1), where p1 and p2

@@ -26,6 +26,5 @@
 // updated to rev 100
 namespace org.jbox2d.callbacks {
 public interface PairCallback {
-	public void addPair(Object userDataA, Object userDataB);
-}
+void addPair(object userDataA, object userDataB);}
 }

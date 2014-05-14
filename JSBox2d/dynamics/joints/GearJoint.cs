@@ -27,14 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-//Gear Joint:
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.pooling;//Gear Joint:
 //C0 = (coordinate1 + ratio * coordinate2)_initial
 //C = (coordinate1 + ratio * coordinate2) - C0 = 0
 //J = [J1 ratio * J2]
@@ -105,8 +98,8 @@ public class GearJoint : Joint {
   private float m_JwA, m_JwB, m_JwC, m_JwD;
   private float m_mass;
 
-  public GearJoint(IWorldPool argWorldPool, GearJointDef def) {
-    super(argWorldPool, def);
+  public GearJoint(IWorldPool argWorldPool, GearJointDef def) 
+      : base(argWorldPool, def){
 
     m_joint1 = def.joint1;
     m_joint2 = def.joint2;
@@ -114,8 +107,6 @@ public class GearJoint : Joint {
     m_typeA = m_joint1.getType();
     m_typeB = m_joint2.getType();
 
-    assert (m_typeA == JointType.REVOLUTE || m_typeA == JointType.PRISMATIC);
-    assert (m_typeB == JointType.REVOLUTE || m_typeB == JointType.PRISMATIC);
 
     float coordinateA, coordinateB;
 

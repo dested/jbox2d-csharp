@@ -25,18 +25,7 @@
 
 
 using System;
-using org.jbox2d.callbacks.ContactListener;
-using org.jbox2d.collision.ContactID;
-using org.jbox2d.collision.Manifold;
-using org.jbox2d.collision.ManifoldPoint;
-using org.jbox2d.collision.shapes.Shape;
-using org.jbox2d.collision.WorldManifold;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Transform;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.Fixture;
-using org.jbox2d.pooling.IWorldPool;
-/**
+using org.jbox2d.callbacks;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision.shapes;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.pooling;/**
  * The class manages contact between two shapes. A contact exists for each overlapping AABB in the
  * broad-phase (except if filtered). Therefore a contact object may exist that has no contact
  * points.

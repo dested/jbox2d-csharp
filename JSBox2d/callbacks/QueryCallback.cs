@@ -27,8 +27,7 @@
 
 
 using System;
-using org.jbox2d.dynamics.Fixture;
-
+using org.jbox2d.dynamics;
 // update to rev 100
 /**
  * Callback class for AABB queries.
@@ -37,12 +36,10 @@ using org.jbox2d.dynamics.Fixture;
  */
 namespace org.jbox2d.callbacks {
 public interface QueryCallback {
-
-	/**
+/**
 	 * Called for each fixture found in the query AABB.
 	 * @param fixture
 	 * @return false to terminate the query.
 	 */
-	public boolean reportFixture(Fixture fixture);
-}
+	bool reportFixture(Fixture fixture);}
 }

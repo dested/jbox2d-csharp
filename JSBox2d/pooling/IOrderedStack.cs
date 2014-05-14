@@ -32,14 +32,11 @@
  */
 namespace org.jbox2d.pooling {
 public interface IOrderedStack<E> {
-
-	/**
+/**
 	 * Returns the next object in the pool
 	 * @return
 	 */
-	public E pop();
-
-	/**
+	E pop();/**
 	 * Returns the next 'argNum' objects in the pool
 	 * in an array
 	 * @param argNum
@@ -47,13 +44,10 @@ public interface IOrderedStack<E> {
 	 * 		   items 0-argNum.  Array length and uniqueness not
 	 * 		   guaranteed.
 	 */
-	public E[] pop(int argNum);
-
-	/**
+	E[] pop(int argNum);/**
 	 * Tells the stack to take back the last 'argNum' items
 	 * @param argNum
 	 */
-	public void push(int argNum);
-
+	void push(int argNum);
 }
 }

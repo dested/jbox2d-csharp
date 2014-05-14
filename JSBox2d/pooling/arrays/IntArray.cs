@@ -37,16 +37,15 @@ using System.Collections;
 namespace org.jbox2d.pooling.arrays {
 public class IntArray {
 	
-	private readonly Hashtable<int?, int[]> map = new Hashtable<int?, int[]>();
+	private readonly Dictionary<int, int[]> map = new Dictionary<int, int[]>();
 	
 	public int[] get( int argLength){
-		assert(argLength > 0);
 		
-		if(!map.containsKey(argLength)){
-			map.put(argLength, getInitializedArray(argLength));
+		if(!map.ContainsKey(argLength)){
+			map[argLength]=getInitializedArray(argLength);
 		}
-		
-		return map.get(argLength);
+
+        return map[argLength];
 	}
 	
 	public int[] getInitializedArray(int argLength){

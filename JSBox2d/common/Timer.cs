@@ -28,21 +28,24 @@
  * 
  * @author Daniel
  */
+
+using System;
+
 namespace org.jbox2d.common {
 public class Timer {
 
-  private long resetNanos;
+  private DateTime resetNanos;
 
   public Timer() {
     reset();
   }
 
   public void reset() {
-    resetNanos = System.nanoTime();
+      resetNanos = DateTime.Now;
   }
 
   public float getMilliseconds() {
-    return (System.nanoTime() - resetNanos) / 1000 * 1f / 1000;
+    return (float)(DateTime.Now - resetNanos) .TotalMilliseconds;
   }
 }
 }

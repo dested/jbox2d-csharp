@@ -30,7 +30,7 @@ using System.IO;
  * @author Daniel Murphy
  */
 namespace org.jbox2d.common {
-public class Vec3 : Serializable {
+public class Vec3 {
   private static readonly long serialVersionUID = 1L;
 
   public float x, y, z;
@@ -124,24 +124,24 @@ public class Vec3 : Serializable {
   }
 
   
-  public override int hashCode() {
+  public override int GetHashCode() {
      int prime = 31;
     int result = 1;
-    result = prime * result + Float.floatToIntBits(x);
-    result = prime * result + Float.floatToIntBits(y);
-    result = prime * result + Float.floatToIntBits(z);
+    result = prime * result + NumberHelper.floatToIntBits(x);
+    result = prime * result + NumberHelper.floatToIntBits(y);
+    result = prime * result + NumberHelper.floatToIntBits(z);
     return result;
   }
 
   
-  public override bool equals(object obj) {
+  public override bool Equals(object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (GetType() != obj.GetType()) return false;
     Vec3 other = (Vec3) obj;
-    if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)) return false;
-    if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) return false;
-    if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z)) return false;
+    if (NumberHelper.floatToIntBits(x) != NumberHelper.floatToIntBits(other.x)) return false;
+    if (NumberHelper.floatToIntBits(y) != NumberHelper.floatToIntBits(other.y)) return false;
+    if (NumberHelper.floatToIntBits(z) != NumberHelper.floatToIntBits(other.z)) return false;
     return true;
   }
 
@@ -167,4 +167,27 @@ public class Vec3 : Serializable {
     out_.z = a.x * b.y - a.y * b.x;
   }
 }
+
+    public static class NumberHelper
+    {
+        public static int floatToIntBits(float j)
+        {
+            return BitConverter.ToInt32(BitConverter.GetBytes(j), 0);
+        }
+
+        public static float floatToRawIntBits(float f)
+        {
+            byte[] bytes = BitConverter.GetBytes(f);
+
+            int result = BitConverter.ToInt32(bytes, 0);
+            return result;
+        }
+
+        public static float intBitsToFloat(int x)
+        {
+            byte[] bytes = BitConverter.GetBytes(x);
+            float f = BitConverter.ToSingle(bytes, 0);
+            return f;
+        }
+    }
 }

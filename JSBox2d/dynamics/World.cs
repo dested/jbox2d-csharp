@@ -24,47 +24,7 @@
 
 
 using System;
-using org.jbox2d.callbacks.ContactFilter;
-using org.jbox2d.callbacks.ContactListener;
-using org.jbox2d.callbacks.DebugDraw;
-using org.jbox2d.callbacks.DestructionListener;
-using org.jbox2d.callbacks.QueryCallback;
-using org.jbox2d.callbacks.RayCastCallback;
-using org.jbox2d.callbacks.TreeCallback;
-using org.jbox2d.callbacks.TreeRayCastCallback;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.broadphase.BroadPhase;
-using org.jbox2d.collision.broadphase.BroadPhaseStrategy;
-using org.jbox2d.collision.broadphase.DynamicTree;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.collision.shapes.ChainShape;
-using org.jbox2d.collision.shapes.CircleShape;
-using org.jbox2d.collision.shapes.EdgeShape;
-using org.jbox2d.collision.shapes.PolygonShape;
-using org.jbox2d.collision.shapes.ShapeType;
-using org.jbox2d.collision.TimeOfImpact.TOIInput;
-using org.jbox2d.collision.TimeOfImpact.TOIOutput;
-using org.jbox2d.collision.TimeOfImpact.TOIOutputState;
-using org.jbox2d.common.Color3f;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Sweep;
-using org.jbox2d.common.Timer;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.contacts.Contact;
-using org.jbox2d.dynamics.contacts.ContactEdge;
-using org.jbox2d.dynamics.contacts.ContactRegister;
-using org.jbox2d.dynamics.joints.Joint;
-using org.jbox2d.dynamics.joints.JointDef;
-using org.jbox2d.dynamics.joints.JointEdge;
-using org.jbox2d.dynamics.joints.PulleyJoint;
-using org.jbox2d.pooling.arrays.Vec2Array;
-using org.jbox2d.pooling.IDynamicStack;
-using org.jbox2d.pooling.IWorldPool;
-using org.jbox2d.pooling.normal.DefaultWorldPool;
-/**
+using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.collision;using org.jbox2d.collision.broadphase;using org.jbox2d.collision.broadphase;using org.jbox2d.collision.broadphase;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.joints;using org.jbox2d.dynamics.joints;using org.jbox2d.dynamics.joints;using org.jbox2d.dynamics.joints;using org.jbox2d.pooling.arrays;using org.jbox2d.pooling;using org.jbox2d.pooling;using org.jbox2d.pooling.normal;/**
  * The world class manages all physics entities, dynamic simulation, and asynchronous queries. The
  * world also contains efficient memory management facilities.
  * 
@@ -119,16 +79,18 @@ public class World {
   private Profile m_profile;
 
 
-  private ContactRegister[,] contactStacks = new ContactRegister[ShapeType.values().length, ShapeType.values().length];
+  private ContactRegister[,] contactStacks = new ContactRegister[4, 4];
 
   /**
    * Construct a world object.
    * 
    * @param gravity the world gravity vector.
    */
-  public World(Vec2 gravity) {
+  public World(Vec2 gravity)
+      : this(gravity, new DefaultWorldPool(WORLD_POOL_SIZE, WORLD_POOL_CONTAINER_SIZE))
+  {
       
-    this(gravity, new DefaultWorldPool(WORLD_POOL_SIZE, WORLD_POOL_CONTAINER_SIZE));
+    
   }
 
   /**
@@ -136,8 +98,10 @@ public class World {
    * 
    * @param gravity the world gravity vector.
    */
-  public World(Vec2 gravity, IWorldPool pool) {
-    this(gravity, pool, new DynamicTree());
+  public World(Vec2 gravity, IWorldPool pool)
+      : this(gravity, pool, new DynamicTree())
+  {
+    
   }
   
   public World(Vec2 gravity, IWorldPool argPool, BroadPhaseStrategy broadPhaseStrategy) {
@@ -198,13 +162,13 @@ public class World {
     ContactRegister register = new ContactRegister();
     register.creator = creator;
     register.primary = true;
-    contactStacks[type1.ordinal(),type2.ordinal()] = register;
+    contactStacks[(int)type1, (int)type2] = register;
 
     if (type1 != type2) {
       ContactRegister register2 = new ContactRegister();
       register2.creator = creator;
       register2.primary = false;
-      contactStacks[type2.ordinal(),type1.ordinal()] = register2;
+      contactStacks[(int)type2, (int)type1] = register2;
     }
   }
 
@@ -222,7 +186,7 @@ public class World {
      ShapeType type1 = fixtureA.getType();
      ShapeType type2 = fixtureB.getType();
 
-     ContactRegister reg = contactStacks[type1.ordinal(),type2.ordinal()];
+     ContactRegister reg = contactStacks[(int)type1, (int)type2];
      IDynamicStack<Contact> creator = reg.creator;
     if (creator != null) {
       if (reg.primary) {
@@ -251,7 +215,7 @@ public class World {
     ShapeType type1 = fixtureA.getType();
     ShapeType type2 = fixtureB.getType();
 
-    IDynamicStack<Contact> creator = contactStacks[type1.ordinal(),type2.ordinal()].creator;
+    IDynamicStack<Contact> creator = contactStacks[(int)type1, (int)type2].creator;
     creator.push(contact);
   }
 
@@ -305,7 +269,6 @@ public class World {
    * @return
    */
   public Body createBody(BodyDef def) {
-    assert (isLocked() == false);
     if (isLocked()) {
       return null;
     }
@@ -333,8 +296,6 @@ public class World {
    * @param body
    */
   public void destroyBody(Body body) {
-    assert (m_bodyCount > 0);
-    assert (isLocked() == false);
     if (isLocked()) {
       return;
     }
@@ -407,7 +368,6 @@ public class World {
    * @return
    */
   public Joint createJoint(JointDef def) {
-    assert (isLocked() == false);
     if (isLocked()) {
       return null;
     }
@@ -471,7 +431,6 @@ public class World {
    * @param joint
    */
   public void destroyJoint(Joint j) {
-    assert (isLocked() == false);
     if (isLocked()) {
       return;
     }
@@ -532,8 +491,6 @@ public class World {
     j.m_edgeB.next = null;
 
     Joint.destroy(j);
-
-    assert (m_jointCount > 0);
     --m_jointCount;
 
     // If the joint prevents collisions, then flag any contacts for filtering.
@@ -552,7 +509,7 @@ public class World {
   }
 
   // djm pooling
-  private readonly TimeStep step = new TimeStep();
+  private readonly TimeStep timeStep = new TimeStep();
   private readonly Timer stepTimer = new Timer();
   private readonly Timer tempTimer = new Timer();
 
@@ -575,18 +532,18 @@ public class World {
 
     m_flags |= LOCKED;
 
-    step.dt = dt;
-    step.velocityIterations = velocityIterations;
-    step.positionIterations = positionIterations;
+    timeStep.dt = dt;
+    timeStep.velocityIterations = velocityIterations;
+    timeStep.positionIterations = positionIterations;
     if (dt > 0.0f) {
-      step.inv_dt = 1.0f / dt;
+      timeStep.inv_dt = 1.0f / dt;
     } else {
-      step.inv_dt = 0.0f;
+      timeStep.inv_dt = 0.0f;
     }
 
-    step.dtRatio = m_inv_dt0 * dt;
+    timeStep.dtRatio = m_inv_dt0 * dt;
 
-    step.warmStarting = m_warmStarting;
+    timeStep.warmStarting = m_warmStarting;
 
     // Update contacts. This is where some contacts are destroyed.
     tempTimer.reset();
@@ -594,21 +551,21 @@ public class World {
     m_profile.collide = tempTimer.getMilliseconds();
 
     // Integrate velocities, solve velocity constraints, and integrate positions.
-    if (m_stepComplete && step.dt > 0.0f) {
+    if (m_stepComplete && timeStep.dt > 0.0f) {
       tempTimer.reset();
-      solve(step);
+      solve(timeStep);
       m_profile.solve = tempTimer.getMilliseconds();
     }
 
     // Handle TOI events.
-    if (m_continuousPhysics && step.dt > 0.0f) {
+    if (m_continuousPhysics && timeStep.dt > 0.0f) {
       tempTimer.reset();
-      solveTOI(step);
+      solveTOI(timeStep);
       m_profile.solveTOI = tempTimer.getMilliseconds();
     }
 
-    if (step.dt > 0.0f) {
-      m_inv_dt0 = step.inv_dt;
+    if (timeStep.dt > 0.0f) {
+      m_inv_dt0 = timeStep.inv_dt;
     }
 
     if ((m_flags & CLEAR_FORCES) == CLEAR_FORCES) {
@@ -983,7 +940,7 @@ public class World {
 
     // Build and simulate all awake islands.
     int stackSize = m_bodyCount;
-    if (stack.length < stackSize) {
+    if (stack.Length < stackSize) {
       stack = new Body[stackSize];
     }
     for (Body seed = m_bodyList; seed != null; seed = seed.m_next) {
@@ -1010,7 +967,6 @@ public class World {
       while (stackCount > 0) {
         // Grab the next body off the stack and add it to the island.
         Body b = stack[--stackCount];
-        assert (b.isActive() == true);
         island.add(b);
 
         // Make sure the body is awake.
@@ -1052,8 +1008,6 @@ public class World {
           if ((other.m_flags & Body.e_islandFlag) == Body.e_islandFlag) {
             continue;
           }
-
-          assert (stackCount < stackSize);
           stack[stackCount++] = other;
           other.m_flags |= Body.e_islandFlag;
         }
@@ -1077,8 +1031,6 @@ public class World {
           if ((other.m_flags & Body.e_islandFlag) == Body.e_islandFlag) {
             continue;
           }
-
-          assert (stackCount < stackSize);
           stack[stackCount++] = other;
           other.m_flags |= Body.e_islandFlag;
         }
@@ -1129,283 +1081,319 @@ public class World {
 
   private void solveTOI( TimeStep step) {
 
-     Island island = toiIsland;
-    island.init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0,
-        m_contactManager.m_contactListener);
-    if (m_stepComplete) {
-      for (Body b = m_bodyList; b != null; b = b.m_next) {
-        b.m_flags &= ~Body.e_islandFlag;
-        b.m_sweep.alpha0 = 0.0f;
-      }
-
-      for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next) {
-        // Invalidate TOI
-        c.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
-        c.m_toiCount = 0;
-        c.m_toi = 1.0f;
-      }
-    }
-
-    // Find TOI events and solve them.
-    for (;;) {
-      // Find the first TOI.
-      Contact minContact = null;
-      float minAlpha = 1.0f;
-
-      for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next) {
-        // Is this contact disabled?
-        if (c.isEnabled() == false) {
-          continue;
-        }
-
-        // Prevent excessive sub-stepping.
-        if (c.m_toiCount > Settings.maxSubSteps) {
-          continue;
-        }
-
-        float alpha = 1.0f;
-        if ((c.m_flags & Contact.TOI_FLAG) != 0) {
-          // This contact has a valid cached TOI.
-          alpha = c.m_toi;
-        } else {
-          Fixture fA = c.getFixtureA();
-          Fixture fB = c.getFixtureB();
-
-          // Is there a sensor?
-          if (fA.isSensor() || fB.isSensor()) {
-            continue;
+      Island island = toiIsland;
+      island.init(2 * Settings.maxTOIContacts, Settings.maxTOIContacts, 0,
+          m_contactManager.m_contactListener);
+      if (m_stepComplete)
+      {
+          for (Body b = m_bodyList; b != null; b = b.m_next)
+          {
+              b.m_flags &= ~Body.e_islandFlag;
+              b.m_sweep.alpha0 = 0.0f;
           }
 
-          Body bA = fA.getBody();
-          Body bB = fB.getBody();
-
-          BodyType typeA = bA.m_type;
-          BodyType typeB = bB.m_type;
-          assert (typeA == BodyType.DYNAMIC || typeB == BodyType.DYNAMIC);
-
-          bool activeA = bA.isAwake() && typeA != BodyType.STATIC;
-          bool activeB = bB.isAwake() && typeB != BodyType.STATIC;
-
-          // Is at least one body active (awake and dynamic or kinematic)?
-          if (activeA == false && activeB == false) {
-            continue;
+          for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
+          {
+              // Invalidate TOI
+              c.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
+              c.m_toiCount = 0;
+              c.m_toi = 1.0f;
           }
-
-          bool collideA = bA.isBullet() || typeA != BodyType.DYNAMIC;
-          bool collideB = bB.isBullet() || typeB != BodyType.DYNAMIC;
-
-          // Are these two non-bullet dynamic bodies?
-          if (collideA == false && collideB == false) {
-            continue;
-          }
-
-          // Compute the TOI for this contact.
-          // Put the sweeps onto the same time interval.
-          float alpha0 = bA.m_sweep.alpha0;
-
-          if (bA.m_sweep.alpha0 < bB.m_sweep.alpha0) {
-            alpha0 = bB.m_sweep.alpha0;
-            bA.m_sweep.advance(alpha0);
-          } else if (bB.m_sweep.alpha0 < bA.m_sweep.alpha0) {
-            alpha0 = bA.m_sweep.alpha0;
-            bB.m_sweep.advance(alpha0);
-          }
-
-          assert (alpha0 < 1.0f);
-
-          int indexA = c.getChildIndexA();
-          int indexB = c.getChildIndexB();
-
-          // Compute the time of impact in interval [0, minTOI]
-           TOIInput input = toiInput;
-          input.proxyA.set(fA.getShape(), indexA);
-          input.proxyB.set(fB.getShape(), indexB);
-          input.sweepA.set(bA.m_sweep);
-          input.sweepB.set(bB.m_sweep);
-          input.tMax = 1.0f;
-
-          pool.getTimeOfImpact().timeOfImpact(toiOutput, input);
-
-          // Beta is the fraction of the remaining portion of the .
-          float beta = toiOutput.t;
-          if (toiOutput.state == TOIOutputState.TOUCHING) {
-            alpha = MathUtils.min(alpha0 + (1.0f - alpha0) * beta, 1.0f);
-          } else {
-            alpha = 1.0f;
-          }
-
-          c.m_toi = alpha;
-          c.m_flags |= Contact.TOI_FLAG;
-        }
-
-        if (alpha < minAlpha) {
-          // This is the minimum TOI found so far.
-          minContact = c;
-          minAlpha = alpha;
-        }
       }
 
-      if (minContact == null || 1.0f - 10.0f * Settings.EPSILON < minAlpha) {
-        // No more TOI events. Done!
-        m_stepComplete = true;
-        break;
-      }
+      // Find TOI events and solve them.
+      for (; ; )
+      {
+          // Find the first TOI.
+          Contact minContact = null;
+          float minAlpha = 1.0f;
 
-      // Advance the bodies to the TOI.
-      Fixture fA = minContact.getFixtureA();
-      Fixture fB = minContact.getFixtureB();
-      Body bA = fA.getBody();
-      Body bB = fB.getBody();
+          for (Contact c = m_contactManager.m_contactList; c != null; c = c.m_next)
+          {
+              // Is this contact disabled?
+              if (c.isEnabled() == false)
+              {
+                  continue;
+              }
 
-      backup1.set(bA.m_sweep);
-      backup2.set(bB.m_sweep);
+              // Prevent excessive sub-stepping.
+              if (c.m_toiCount > Settings.maxSubSteps)
+              {
+                  continue;
+              }
 
-      bA.advance(minAlpha);
-      bB.advance(minAlpha);
+              float alpha = 1.0f;
+              if ((c.m_flags & Contact.TOI_FLAG) != 0)
+              {
+                  // This contact has a valid cached TOI.
+                  alpha = c.m_toi;
+              }
+              else
+              {
+                  Fixture fA = c.getFixtureA();
+                  Fixture fB = c.getFixtureB();
 
-      // The TOI contact likely has some new contact points.
-      minContact.update(m_contactManager.m_contactListener);
-      minContact.m_flags &= ~Contact.TOI_FLAG;
-      ++minContact.m_toiCount;
+                  // Is there a sensor?
+                  if (fA.isSensor() || fB.isSensor())
+                  {
+                      continue;
+                  }
 
-      // Is the contact solid?
-      if (minContact.isEnabled() == false || minContact.isTouching() == false) {
-        // Restore the sweeps.
-        minContact.setEnabled(false);
-        bA.m_sweep.set(backup1);
-        bB.m_sweep.set(backup2);
-        bA.synchronizeTransform();
-        bB.synchronizeTransform();
-        continue;
-      }
+                  Body bA = fA.getBody();
+                  Body bB = fB.getBody();
 
-      bA.setAwake(true);
-      bB.setAwake(true);
+                  BodyType typeA = bA.m_type;
+                  BodyType typeB = bB.m_type;
 
-      // Build the island
-      island.clear();
-      island.add(bA);
-      island.add(bB);
-      island.add(minContact);
+                  bool activeA = bA.isAwake() && typeA != BodyType.STATIC;
+                  bool activeB = bB.isAwake() && typeB != BodyType.STATIC;
 
-      bA.m_flags |= Body.e_islandFlag;
-      bB.m_flags |= Body.e_islandFlag;
-      minContact.m_flags |= Contact.ISLAND_FLAG;
+                  // Is at least one body active (awake and dynamic or kinematic)?
+                  if (activeA == false && activeB == false)
+                  {
+                      continue;
+                  }
 
-      // Get contacts on bodyA and bodyB.
-      tempBodies[0] = bA;
-      tempBodies[1] = bB;
-      for (int i = 0; i < 2; ++i) {
-        Body body = tempBodies[i];
-        if (body.m_type == BodyType.DYNAMIC) {
-          for (ContactEdge ce = body.m_contactList; ce != null; ce = ce.next) {
-            if (island.m_bodyCount == island.m_bodyCapacity) {
+                  bool collideA = bA.isBullet() || typeA != BodyType.DYNAMIC;
+                  bool collideB = bB.isBullet() || typeB != BodyType.DYNAMIC;
+
+                  // Are these two non-bullet dynamic bodies?
+                  if (collideA == false && collideB == false)
+                  {
+                      continue;
+                  }
+
+                  // Compute the TOI for this contact.
+                  // Put the sweeps onto the same time interval.
+                  float alpha0 = bA.m_sweep.alpha0;
+
+                  if (bA.m_sweep.alpha0 < bB.m_sweep.alpha0)
+                  {
+                      alpha0 = bB.m_sweep.alpha0;
+                      bA.m_sweep.advance(alpha0);
+                  }
+                  else if (bB.m_sweep.alpha0 < bA.m_sweep.alpha0)
+                  {
+                      alpha0 = bA.m_sweep.alpha0;
+                      bB.m_sweep.advance(alpha0);
+                  }
+
+                  int indexA = c.getChildIndexA();
+                  int indexB = c.getChildIndexB();
+
+                  // Compute the time of impact in interval [0, minTOI]
+                  TOIInput input = toiInput;
+                  input.proxyA.set(fA.getShape(), indexA);
+                  input.proxyB.set(fB.getShape(), indexB);
+                  input.sweepA.set(bA.m_sweep);
+                  input.sweepB.set(bB.m_sweep);
+                  input.tMax = 1.0f;
+
+                  pool.getTimeOfImpact().timeOfImpact(toiOutput, input);
+
+                  // Beta is the fraction of the remaining portion of the .
+                  float beta = toiOutput.t;
+                  if (toiOutput.state == TOIOutputState.TOUCHING)
+                  {
+                      alpha = MathUtils.min(alpha0 + (1.0f - alpha0) * beta, 1.0f);
+                  }
+                  else
+                  {
+                      alpha = 1.0f;
+                  }
+
+                  c.m_toi = alpha;
+                  c.m_flags |= Contact.TOI_FLAG;
+              }
+
+              if (alpha < minAlpha)
+              {
+                  // This is the minimum TOI found so far.
+                  minContact = c;
+                  minAlpha = alpha;
+              }
+          }
+
+          if (minContact == null || 1.0f - 10.0f * Settings.EPSILON < minAlpha)
+          {
+              // No more TOI events. Done!
+              m_stepComplete = true;
               break;
-            }
-
-            if (island.m_contactCount == island.m_contactCapacity) {
-              break;
-            }
-
-            Contact contact = ce.contact;
-
-            // Has this contact already been added to the island?
-            if ((contact.m_flags & Contact.ISLAND_FLAG) != 0) {
-              continue;
-            }
-
-            // Only add static, kinematic, or bullet bodies.
-            Body other = ce.other;
-            if (other.m_type == BodyType.DYNAMIC && body.isBullet() == false
-                && other.isBullet() == false) {
-              continue;
-            }
-
-            // Skip sensors.
-            bool sensorA = contact.m_fixtureA.m_isSensor;
-            bool sensorB = contact.m_fixtureB.m_isSensor;
-            if (sensorA || sensorB) {
-              continue;
-            }
-
-            // Tentatively advance the body to the TOI.
-            backup1.set(other.m_sweep);
-            if ((other.m_flags & Body.e_islandFlag) == 0) {
-              other.advance(minAlpha);
-            }
-
-            // Update the contact points
-            contact.update(m_contactManager.m_contactListener);
-
-            // Was the contact disabled by the user?
-            if (contact.isEnabled() == false) {
-              other.m_sweep.set(backup1);
-              other.synchronizeTransform();
-              continue;
-            }
-
-            // Are there contact points?
-            if (contact.isTouching() == false) {
-              other.m_sweep.set(backup1);
-              other.synchronizeTransform();
-              continue;
-            }
-
-            // Add the contact to the island
-            contact.m_flags |= Contact.ISLAND_FLAG;
-            island.add(contact);
-
-            // Has the other body already been added to the island?
-            if ((other.m_flags & Body.e_islandFlag) != 0) {
-              continue;
-            }
-
-            // Add the other body to the island.
-            other.m_flags |= Body.e_islandFlag;
-
-            if (other.m_type != BodyType.STATIC) {
-              other.setAwake(true);
-            }
-
-            island.add(other);
           }
-        }
+
+          // Advance the bodies to the TOI.
+          Fixture fA2 = minContact.getFixtureA();
+          Fixture fB2 = minContact.getFixtureB();
+          Body bA2 = fA2.getBody();
+          Body bB2 = fB2.getBody();
+
+          backup1.set(bA2.m_sweep);
+          backup2.set(bB2.m_sweep);
+
+          bA2.advance(minAlpha);
+          bB2.advance(minAlpha);
+
+          // The TOI contact likely has some new contact points.
+          minContact.update(m_contactManager.m_contactListener);
+          minContact.m_flags &= ~Contact.TOI_FLAG;
+          ++minContact.m_toiCount;
+
+          // Is the contact solid?
+          if (minContact.isEnabled() == false || minContact.isTouching() == false)
+          {
+              // Restore the sweeps.
+              minContact.setEnabled(false);
+              bA2.m_sweep.set(backup1);
+              bB2.m_sweep.set(backup2);
+              bA2.synchronizeTransform();
+              bB2.synchronizeTransform();
+              continue;
+          }
+
+          bA2.setAwake(true);
+          bB2.setAwake(true);
+
+          // Build the island
+          island.clear();
+          island.add(bA2);
+          island.add(bB2);
+          island.add(minContact);
+
+          bA2.m_flags |= Body.e_islandFlag;
+          bB2.m_flags |= Body.e_islandFlag;
+          minContact.m_flags |= Contact.ISLAND_FLAG;
+
+          // Get contacts on bodyA and bodyB.
+          tempBodies[0] = bA2;
+          tempBodies[1] = bB2;
+          for (int i = 0; i < 2; ++i)
+          {
+              Body body = tempBodies[i];
+              if (body.m_type == BodyType.DYNAMIC)
+              {
+                  for (ContactEdge ce = body.m_contactList; ce != null; ce = ce.next)
+                  {
+                      if (island.m_bodyCount == island.m_bodyCapacity)
+                      {
+                          break;
+                      }
+
+                      if (island.m_contactCount == island.m_contactCapacity)
+                      {
+                          break;
+                      }
+
+                      Contact contact = ce.contact;
+
+                      // Has this contact already been added to the island?
+                      if ((contact.m_flags & Contact.ISLAND_FLAG) != 0)
+                      {
+                          continue;
+                      }
+
+                      // Only add static, kinematic, or bullet bodies.
+                      Body other = ce.other;
+                      if (other.m_type == BodyType.DYNAMIC && body.isBullet() == false
+                          && other.isBullet() == false)
+                      {
+                          continue;
+                      }
+
+                      // Skip sensors.
+                      bool sensorA = contact.m_fixtureA.m_isSensor;
+                      bool sensorB = contact.m_fixtureB.m_isSensor;
+                      if (sensorA || sensorB)
+                      {
+                          continue;
+                      }
+
+                      // Tentatively advance the body to the TOI.
+                      backup1.set(other.m_sweep);
+                      if ((other.m_flags & Body.e_islandFlag) == 0)
+                      {
+                          other.advance(minAlpha);
+                      }
+
+                      // Update the contact points
+                      contact.update(m_contactManager.m_contactListener);
+
+                      // Was the contact disabled by the user?
+                      if (contact.isEnabled() == false)
+                      {
+                          other.m_sweep.set(backup1);
+                          other.synchronizeTransform();
+                          continue;
+                      }
+
+                      // Are there contact points?
+                      if (contact.isTouching() == false)
+                      {
+                          other.m_sweep.set(backup1);
+                          other.synchronizeTransform();
+                          continue;
+                      }
+
+                      // Add the contact to the island
+                      contact.m_flags |= Contact.ISLAND_FLAG;
+                      island.add(contact);
+
+                      // Has the other body already been added to the island?
+                      if ((other.m_flags & Body.e_islandFlag) != 0)
+                      {
+                          continue;
+                      }
+
+                      // Add the other body to the island.
+                      other.m_flags |= Body.e_islandFlag;
+
+                      if (other.m_type != BodyType.STATIC)
+                      {
+                          other.setAwake(true);
+                      }
+
+                      island.add(other);
+                  }
+              }
+          }
+
+          subStep.dt = (1.0f - minAlpha) * step.dt;
+          subStep.inv_dt = 1.0f / subStep.dt;
+          subStep.dtRatio = 1.0f;
+          subStep.positionIterations = 20;
+          subStep.velocityIterations = step.velocityIterations;
+          subStep.warmStarting = false;
+          island.solveTOI(subStep, bA2.m_islandIndex, bB2.m_islandIndex);
+
+          // Reset island flags and synchronize broad-phase proxies.
+          for (int i = 0; i < island.m_bodyCount; ++i)
+          {
+              Body body = island.m_bodies[i];
+              body.m_flags &= ~Body.e_islandFlag;
+
+              if (body.m_type != BodyType.DYNAMIC)
+              {
+                  continue;
+              }
+
+              body.synchronizeFixtures();
+
+              // Invalidate all contact TOIs on this displaced body.
+              for (ContactEdge ce = body.m_contactList; ce != null; ce = ce.next)
+              {
+                  ce.contact.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
+              }
+          }
+
+          // Commit fixture proxy movements to the broad-phase so that new contacts are created.
+          // Also, some contacts can be destroyed.
+          m_contactManager.findNewContacts();
+
+          if (m_subStepping)
+          {
+              m_stepComplete = false;
+              break;
+          }
       }
-
-      subStep.dt = (1.0f - minAlpha) * step.dt;
-      subStep.inv_dt = 1.0f / subStep.dt;
-      subStep.dtRatio = 1.0f;
-      subStep.positionIterations = 20;
-      subStep.velocityIterations = step.velocityIterations;
-      subStep.warmStarting = false;
-      island.solveTOI(subStep, bA.m_islandIndex, bB.m_islandIndex);
-
-      // Reset island flags and synchronize broad-phase proxies.
-      for (int i = 0; i < island.m_bodyCount; ++i) {
-        Body body = island.m_bodies[i];
-        body.m_flags &= ~Body.e_islandFlag;
-
-        if (body.m_type != BodyType.DYNAMIC) {
-          continue;
-        }
-
-        body.synchronizeFixtures();
-
-        // Invalidate all contact TOIs on this displaced body.
-        for (ContactEdge ce = body.m_contactList; ce != null; ce = ce.next) {
-          ce.contact.m_flags &= ~(Contact.TOI_FLAG | Contact.ISLAND_FLAG);
-        }
-      }
-
-      // Commit fixture proxy movements to the broad-phase so that new contacts are created.
-      // Also, some contacts can be destroyed.
-      m_contactManager.findNewContacts();
-
-      if (m_subStepping) {
-        m_stepComplete = false;
-        break;
-      }
-    }
   }
 
   private void drawJoint(Joint joint) {
@@ -1424,11 +1412,12 @@ public class World {
 
     switch (joint.getType()) {
     // TODO djm write after writing joints
-      case DISTANCE:
+      case JointType. DISTANCE:
         m_debugDraw.drawSegment(p1, p2, color);
         break;
 
-      case PULLEY: {
+      case JointType.PULLEY:
+        {
         PulleyJoint pulley = (PulleyJoint) joint;
         Vec2 s1 = pulley.getGroundAnchorA();
         Vec2 s2 = pulley.getGroundAnchorB();
@@ -1437,21 +1426,22 @@ public class World {
         m_debugDraw.drawSegment(s1, s2, color);
       }
         break;
-      case CONSTANT_VOLUME:
-      case MOUSE:
+      case JointType.CONSTANT_VOLUME:
+      case JointType.MOUSE:
         // don't draw this
         break;
       default:
         m_debugDraw.drawSegment(x1, p1, color);
         m_debugDraw.drawSegment(p1, p2, color);
         m_debugDraw.drawSegment(x2, p2, color);
+        break;
     }
     pool.pushVec2(2);
   }
 
   // NOTE this corresponds to the liquid test, so the debugdraw can draw
   // the liquid particles correctly. They should be the same.
-  private static int? LIQUID_INT = new int?(1234598372);
+  private static int LIQUID_INT = 1234598372;
   private float liquidLength = .12f;
   private float averageLinearVel = -1;
   private readonly Vec2 liquidOffset = new Vec2();
@@ -1466,7 +1456,8 @@ public class World {
 
   private void drawShape(Fixture fixture, Transform xf, Color3f color) {
     switch (fixture.getType()) {
-      case CIRCLE: {
+        case ShapeType.CIRCLE:
+            {
         CircleShape circle = (CircleShape) fixture.getShape();
 
         // Vec2 center = Mul(xf, circle.m_p);
@@ -1474,7 +1465,7 @@ public class World {
         float radius = circle.m_radius;
         xf.q.getXAxis(axis);
 
-        if (fixture.getUserData() != null && fixture.getUserData().equals(LIQUID_INT)) {
+        if (fixture.getUserData() != null && fixture.getUserData().Equals(LIQUID_INT)) {
           Body b = fixture.getBody();
           liquidOffset.set(b.m_linearVelocity);
           float linVelLength = b.m_linearVelocity.length();
@@ -1494,10 +1485,10 @@ public class World {
       }
         break;
 
-      case POLYGON: {
+        case ShapeType.POLYGON:
+        {
         PolygonShape poly = (PolygonShape) fixture.getShape();
         int vertexCount = poly.m_count;
-        assert (vertexCount <= Settings.maxPolygonVertices);
         Vec2[] vertices = tlvertices.get(Settings.maxPolygonVertices);
 
         for (int i = 0; i < vertexCount; ++i) {
@@ -1508,7 +1499,8 @@ public class World {
         m_debugDraw.drawSolidPolygon(vertices, vertexCount, color);
       }
         break;
-      case EDGE: {
+        case ShapeType.EDGE:
+        {
         EdgeShape edge = (EdgeShape) fixture.getShape();
         Transform.mulToOutUnsafe(xf, edge.m_vertex1, v1);
         Transform.mulToOutUnsafe(xf, edge.m_vertex2, v2);
@@ -1516,7 +1508,7 @@ public class World {
       }
         break;
 
-      case CHAIN: {
+      case ShapeType. CHAIN: {
         ChainShape chain = (ChainShape) fixture.getShape();
         int count = chain.m_count;
         Vec2[] vertices = chain.m_vertices;
@@ -1543,8 +1535,8 @@ class WorldQueryWrapper : TreeCallback {
     return callback.reportFixture(proxy.fixture);
   }
 
-  BroadPhase broadPhase;
-  QueryCallback callback;
+  public BroadPhase broadPhase;
+  public QueryCallback callback;
 };
 
 
@@ -1572,8 +1564,9 @@ class WorldRayCastWrapper : TreeRayCastCallback {
 
     return input.maxFraction;
   }
-
+ public 
   BroadPhase broadPhase;
-  RayCastCallback callback;
+ public   RayCastCallback callback;
 };
-}
+
+ }

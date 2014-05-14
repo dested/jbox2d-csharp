@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-
+using org.jbox2d.collision;
 namespace org.jbox2d.collision.broadphase {
 public class DynamicTreeNode {
   /**

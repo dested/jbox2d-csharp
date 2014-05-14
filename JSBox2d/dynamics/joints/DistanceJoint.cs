@@ -47,13 +47,7 @@
 
 
 using System;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-//C = norm(p2 - p1) - L
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;//C = norm(p2 - p1) - L
 //u = (p2 - p1) / norm(p2 - p1)
 //Cdot = dot(u, v2 + cross(w2, r2) - v1 - cross(w1, r1))
 //J = [-u -cross(r1, u) u cross(r2, u)]
@@ -92,8 +86,7 @@ public class DistanceJoint : Joint {
   private float m_invIB;
   private float m_mass;
 
-  public DistanceJoint(IWorldPool argWorld,  DistanceJointDef def) {
-    super(argWorld, def);
+  public DistanceJoint(IWorldPool argWorld,  DistanceJointDef def) :base(argWorld,def){
     m_localAnchorA = def.localAnchorA.clone();
     m_localAnchorB = def.localAnchorB.clone();
     m_length = def.length;

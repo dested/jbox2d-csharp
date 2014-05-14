@@ -33,7 +33,8 @@
 using System;
 
 namespace org.jbox2d.pooling.normal {
-public abstract class OrderedStack<E> {
+public 
+    class OrderedStack<E> {
 
   private readonly E[] pool;
   private int index;
@@ -67,6 +68,6 @@ public abstract class OrderedStack<E> {
   }
 
   /** Creates a new instance of the object contained by this stack. */
-  public abstract E newInstance();
+  public Func<E> newInstance;
 }
 }

@@ -1,11 +1,5 @@
 using System;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;/**
  * A rope joint enforces a maximum distance between two points on two bodies. It has no other
  * effect. Warning: if you attempt to change the maximum length during the simulation you will get
  * some non-physical behavior. A model that would allow you to dynamically modify the length would
@@ -38,8 +32,9 @@ public class RopeJoint : Joint {
   private float m_mass;
   private LimitState m_state;
 
-  public RopeJoint(IWorldPool worldPool, RopeJointDef def) {
-    super(worldPool, def);
+  public RopeJoint(IWorldPool worldPool, RopeJointDef def)
+      : base(worldPool, def)
+  { 
     m_localAnchorA.set(def.localAnchorA);
     m_localAnchorB.set(def.localAnchorB);
 

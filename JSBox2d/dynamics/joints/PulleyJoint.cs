@@ -27,13 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;/**
  * The pulley joint is connected to two bodies and two fixed ground points. The pulley supports a
  * ratio such that: length1 + ratio * length2 <= constant Yes, the force transmitted is scaled by
  * the ratio. Warning: the pulley joint can get a bit squirrelly by itself. They often work better
@@ -74,14 +68,15 @@ public class PulleyJoint : Joint {
   private float m_invIB;
   private float m_mass;
 
-  public PulleyJoint(IWorldPool argWorldPool, PulleyJointDef def) {
-    super(argWorldPool, def);
+  public PulleyJoint(IWorldPool argWorldPool, PulleyJointDef def)
+      : base(argWorldPool, def)
+  {
+    
     m_groundAnchorA.set(def.groundAnchorA);
     m_groundAnchorB.set(def.groundAnchorB);
     m_localAnchorA.set(def.localAnchorA);
     m_localAnchorB.set(def.localAnchorB);
 
-    assert (def.ratio != 0.0f);
     m_ratio = def.ratio;
 
     m_lengthA = def.lengthA;

@@ -32,7 +32,7 @@ using System.IO;
  * @author Daniel Murphy
  */
 namespace org.jbox2d.common {
-public class Mat33 : Serializable {
+public class Mat33 {
   private static readonly long serialVersionUID = 2L;
 
   public static readonly Mat33 IDENTITY = new Mat33(new Vec3(1, 0, 0), new Vec3(0, 1, 0), new Vec3(0,
@@ -75,7 +75,6 @@ public class Mat33 : Serializable {
   }
 
   public static  void mul22ToOutUnsafe(Mat33 A, Vec2 v, Vec2 out_) {
-    assert (v != out_);
     out_.y = A.ex.y * v.x + A.ey.y * v.y;
     out_.x = A.ex.x * v.x + A.ey.x * v.y;
   }
@@ -89,7 +88,6 @@ public class Mat33 : Serializable {
   }
 
   public static  void mulToOutUnsafe(Mat33 A, Vec3 v, Vec3 out_) {
-      assert(out_ != v);
     out_.x = v.x * A.ex.x + v.y * A.ey.x + v.z * A.ez.x;
     out_.y = v.x * A.ex.y + v.y * A.ey.y + v.z * A.ez.y;
     out_.z = v.x * A.ex.z + v.y * A.ey.z + v.z * A.ez.z;
@@ -147,7 +145,6 @@ public class Mat33 : Serializable {
    * @param out_ the result
    */
   public  void solve33ToOut(Vec3 b, Vec3 out_) {
-    assert (b != out_);
     Vec3.crossToOutUnsafe(ey, ez, out_);
     float det = Vec3.dot(ex, out_);
     if (det != 0.0f) {
@@ -210,30 +207,30 @@ public class Mat33 : Serializable {
   }
 
   
-  public override int hashCode() {
+  public override int GetHashCode() {
      int prime = 31;
     int result = 1;
-    result = prime * result + ((ex == null) ? 0 : ex.hashCode());
-    result = prime * result + ((ey == null) ? 0 : ey.hashCode());
-    result = prime * result + ((ez == null) ? 0 : ez.hashCode());
+    result = prime * result + ((ex == null) ? 0 : ex.GetHashCode());
+    result = prime * result + ((ey == null) ? 0 : ey.GetHashCode());
+    result = prime * result + ((ez == null) ? 0 : ez.GetHashCode());
     return result;
   }
 
   
-  public override bool equals(object obj) {
+  public override bool Equals(object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (GetType() != obj.GetType()) return false;
     Mat33 other = (Mat33) obj;
     if (ex == null) {
       if (other.ex != null) return false;
-    } else if (!ex.equals(other.ex)) return false;
+    } else if (!ex.Equals(other.ex)) return false;
     if (ey == null) {
       if (other.ey != null) return false;
-    } else if (!ey.equals(other.ey)) return false;
+    } else if (!ey.Equals(other.ey)) return false;
     if (ez == null) {
       if (other.ez != null) return false;
-    } else if (!ez.equals(other.ez)) return false;
+    } else if (!ez.Equals(other.ez)) return false;
     return true;
   }
 }

@@ -24,21 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.Manifold;
-using org.jbox2d.collision.ManifoldPoint;
-using org.jbox2d.collision.shapes.Shape;
-using org.jbox2d.collision.WorldManifold;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.contacts.ContactVelocityConstraint.VelocityConstraintPoint;
-using org.jbox2d.dynamics.Fixture;
-using org.jbox2d.dynamics.TimeStep;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision.shapes;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.dynamics;/**
  * @author Daniel
  */
 namespace org.jbox2d.dynamics.contacts {
@@ -84,20 +70,20 @@ public class ContactSolver {
     m_step = def.step;
     m_count = def.count;
 
-    if (m_positionConstraints.length < m_count) {
+    if (m_positionConstraints.Length < m_count) {
       ContactPositionConstraint[] old = m_positionConstraints;
-      m_positionConstraints = new ContactPositionConstraint[MathUtils.max(old.length * 2, m_count)];
-      Array.Copy(old, 0, m_positionConstraints, 0, old.length);
-      for (int i = old.length; i < m_positionConstraints.length; i++) {
+      m_positionConstraints = new ContactPositionConstraint[MathUtils.max(old.Length * 2, m_count)];
+      Array.Copy(old, 0, m_positionConstraints, 0, old.Length);
+      for (int i = old.Length; i < m_positionConstraints.Length; i++) {
         m_positionConstraints[i] = new ContactPositionConstraint();
       }
     }
 
-    if (m_velocityConstraints.length < m_count) {
+    if (m_velocityConstraints.Length < m_count) {
       ContactVelocityConstraint[] old = m_velocityConstraints;
-      m_velocityConstraints = new ContactVelocityConstraint[MathUtils.max(old.length * 2, m_count)];
-      Array.Copy(old, 0, m_velocityConstraints, 0, old.length);
-      for (int i = old.length; i < m_velocityConstraints.length; i++) {
+      m_velocityConstraints = new ContactVelocityConstraint[MathUtils.max(old.Length * 2, m_count)];
+      Array.Copy(old, 0, m_velocityConstraints, 0, old.Length);
+      for (int i = old.Length; i < m_velocityConstraints.Length; i++) {
         m_velocityConstraints[i] = new ContactVelocityConstraint();
       }
     }
@@ -121,7 +107,6 @@ public class ContactSolver {
        Manifold manifold = contact.getManifold();
 
       int pointCount = manifold.pointCount;
-      assert (pointCount > 0);
 
       ContactVelocityConstraint vc = m_velocityConstraints[i];
       vc.friction = contact.m_friction;
@@ -259,8 +244,6 @@ public class ContactSolver {
       Vec2 vB = m_velocities[indexB].v;
       float wB = m_velocities[indexB].w;
 
-      assert (manifold.pointCount > 0);
-
       xfA.q.set(aA);
       xfB.q.set(aB);
       xfA.p.x = cA.x - (xfA.q.c * localCenterA.x - xfA.q.s * localCenterA.y);
@@ -365,8 +348,6 @@ public class ContactSolver {
       tangent.x = 1.0f * vc.normal.y;
       tangent.y = -1.0f * vc.normal.x;
        float friction = vc.friction;
-
-      assert (pointCount == 1 || pointCount == 2);
 
       // Solve tangent constraints
       for (int j = 0; j < pointCount; ++j) {
@@ -480,8 +461,6 @@ public class ContactSolver {
          VelocityConstraintPoint cp2 = vc.points[1];
         a.x = cp1.normalImpulse;
         a.y = cp2.normalImpulse;
-
-        assert (a.x >= 0.0f && a.y >= 0.0f);
         // Relative velocity at contact
         // Vec2 dv1 = vB + Cross(wB, cp1.rB) - vA - Cross(wA, cp1.rA);
         dv1.x = -wB * cp1.rB.y + vB.x - vA.x + wA * cp1.rA.y;
@@ -564,16 +543,13 @@ public class ContactSolver {
              */
             if (DEBUG_SOLVER) {
               // Postconditions
-              Vec2 dv1 =
+              Vec2 dv1c =
                   vB.add(Vec2.cross(wB, cp1.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp1.rA)));
-              Vec2 dv2 =
+              Vec2 dv2c =
                   vB.add(Vec2.cross(wB, cp2.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp2.rA)));
               // Compute normal velocity
-              vn1 = Vec2.dot(dv1, normal);
-              vn2 = Vec2.dot(dv2, normal);
-
-              assert (MathUtils.abs(vn1 - cp1.velocityBias) < k_errorTol);
-              assert (MathUtils.abs(vn2 - cp2.velocityBias) < k_errorTol);
+              vn1 = Vec2.dot(dv1c, normal);
+              vn2 = Vec2.dot(dv2c, normal);
             }
             break;
           }
@@ -630,12 +606,10 @@ public class ContactSolver {
              */
             if (DEBUG_SOLVER) {
               // Postconditions
-              Vec2 dv1 =
+              Vec2 dv1c =
                   vB.add(Vec2.cross(wB, cp1.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp1.rA)));
               // Compute normal velocity
-              vn1 = Vec2.dot(dv1, normal);
-
-              assert (MathUtils.abs(vn1 - cp1.velocityBias) < k_errorTol);
+              vn1 = Vec2.dot(dv1c, normal);
             }
             break;
           }
@@ -690,12 +664,10 @@ public class ContactSolver {
              */
             if (DEBUG_SOLVER) {
               // Postconditions
-              Vec2 dv2 =
+              Vec2 dv2c =
                   vB.add(Vec2.cross(wB, cp2.rB).subLocal(vA).subLocal(Vec2.cross(wA, cp2.rA)));
               // Compute normal velocity
-              vn2 = Vec2.dot(dv2, normal);
-
-              assert (MathUtils.abs(vn2 - cp2.velocityBias) < k_errorTol);
+              vn2 = Vec2.dot(dv2c, normal);
             }
             break;
           }
@@ -981,13 +953,14 @@ public class ContactSolver {
     return minSeparation >= -1.5f * Settings.linearSlop;
   }
 
-  public  class ContactSolverDef {
+}
+public class ContactSolverDef
+{
     public TimeStep step;
     public Contact[] contacts;
     public int count;
     public Position[] positions;
     public Velocity[] velocities;
-  }
 }
 
 
@@ -998,13 +971,13 @@ class PositionSolverManifold {
   public float separation;
 
   public void initialize(ContactPositionConstraint pc, Transform xfA, Transform xfB, int index) {
-    assert (pc.pointCount > 0);
 
      Rot xfAq = xfA.q;
      Rot xfBq = xfB.q;
      Vec2 pcLocalPointsI = pc.localPoints[index];
     switch (pc.type) {
-      case CIRCLES: {
+        case ManifoldType.CIRCLES:
+            {
         // Transform.mulToOutUnsafe(xfA, pc.localPoint, pointA);
         // Transform.mulToOutUnsafe(xfB, pc.localPoints[0], pointB);
         // normal.set(pointB).subLocal(pointA);
@@ -1031,7 +1004,8 @@ class PositionSolverManifold {
         break;
       }
 
-      case FACE_A: {
+        case ManifoldType.FACE_A:
+            {
         // Rot.mulToOutUnsafe(xfAq, pc.localNormal, normal);
         // Transform.mulToOutUnsafe(xfA, pc.localPoint, planePoint);
         //
@@ -1056,7 +1030,8 @@ class PositionSolverManifold {
         break;
       }
 
-      case FACE_B: {
+        case ManifoldType.FACE_B:
+            {
         // Rot.mulToOutUnsafe(xfBq, pc.localNormal, normal);
         // Transform.mulToOutUnsafe(xfB, pc.localPoint, planePoint);
         //

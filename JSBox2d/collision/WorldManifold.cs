@@ -24,12 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;/**
  * This is used to compute the current state of a contact manifold.
  * 
  * @author daniel
@@ -64,7 +59,7 @@ public class WorldManifold {
     }
 
     switch (manifold.type) {
-      case CIRCLES: {
+      case ManifoldType.CIRCLES: {
         // Vec2 pointA = pool3;
         // Vec2 pointB = pool4;
         //
@@ -112,7 +107,8 @@ public class WorldManifold {
         points[0].y = (cAy + cBy) * .5f;
       }
         break;
-      case FACE_A: {
+      case ManifoldType.FACE_A:
+        {
          Vec2 planePoint = pool3;
 
         Rot.mulToOutUnsafe(xfA.q, manifold.localNormal, normal);
@@ -150,10 +146,10 @@ public class WorldManifold {
         }
       }
         break;
-      case FACE_B:
-         Vec2 planePoint = pool3;
+      case ManifoldType.FACE_B:
+         Vec2 planePoint2 = pool3;
         Rot.mulToOutUnsafe(xfB.q, manifold.localNormal, normal);
-        Transform.mulToOut(xfB, manifold.localPoint, planePoint);
+        Transform.mulToOut(xfB, manifold.localPoint, planePoint2);
 
         // Mat22 R = xfB.q;
         // normal.x = R.ex.x * manifold.localNormal.x + R.ey.x * manifold.localNormal.y;
@@ -162,7 +158,7 @@ public class WorldManifold {
         // planePoint.x = xfB.p.x + xfB.q.ex.x * v.x + xfB.q.ey.x * v.y;
         // planePoint.y = xfB.p.y + xfB.q.ex.y * v.x + xfB.q.ey.y * v.y;
 
-         Vec2 clipPoint = pool4;
+         Vec2 clipPoint2 = pool4;
 
         for (int i = 0; i < manifold.pointCount; i++) {
           // b2Vec2 clipPoint = b2Mul(xfA, manifold->points[i].localPoint);
@@ -171,7 +167,7 @@ public class WorldManifold {
           // b2Vec2 cA = clipPoint - radiusA * normal;
           // points[i] = 0.5f * (cA + cB);
 
-          Transform.mulToOut(xfA, manifold.points[i].localPoint, clipPoint);
+          Transform.mulToOut(xfA, manifold.points[i].localPoint, clipPoint2);
           // cB.set(clipPoint).subLocal(planePoint);
           // float scalar = radiusB - Vec2.dot(cB, normal);
           // cB.set(normal).mulLocal(scalar).addLocal(clipPoint);
@@ -188,14 +184,14 @@ public class WorldManifold {
 
            float scalar =
               radiusB
-                  - ((clipPoint.x - planePoint.x) * normal.x + (clipPoint.y - planePoint.y)
+                  - ((clipPoint2.x - planePoint2.x) * normal.x + (clipPoint2.y - planePoint2.y)
                       * normal.y);
 
-           float cBx = normal.x * scalar + clipPoint.x;
-           float cBy = normal.y * scalar + clipPoint.y;
+           float cBx = normal.x * scalar + clipPoint2.x;
+           float cBy = normal.y * scalar + clipPoint2.y;
 
-           float cAx = -normal.x * radiusA + clipPoint.x;
-           float cAy = -normal.y * radiusA + clipPoint.y;
+           float cAx = -normal.x * radiusA + clipPoint2.x;
+           float cAy = -normal.y * radiusA + clipPoint2.y;
 
           points[i].x = (cAx + cBx) * .5f;
           points[i].y = (cAy + cBy) * .5f;

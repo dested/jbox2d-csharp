@@ -24,14 +24,8 @@
 
 
 using System;
-using org.jbox2d.dynamics.Fixture;
-using org.jbox2d.pooling.IWorldPool;
-// updated to rev 100
+using org.jbox2d.dynamics;using org.jbox2d.pooling;// updated to rev 100
 namespace org.jbox2d.dynamics.contacts {
 public interface ContactCreator {
-
-	public Contact contactCreateFcn(IWorldPool argPool, Fixture fixtureA, Fixture fixtureB);
-	
-	public void contactDestroyFcn(IWorldPool argPool, Contact contact);
-}
+Contact contactCreateFcn(IWorldPool argPool, Fixture fixtureA, Fixture fixtureB);void contactDestroyFcn(IWorldPool argPool, Contact contact);}
 }

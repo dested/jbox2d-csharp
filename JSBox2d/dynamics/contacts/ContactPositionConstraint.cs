@@ -24,26 +24,24 @@
 
 
 using System;
-using org.jbox2d.collision.Manifold.ManifoldType;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-namespace org.jbox2d.dynamics.contacts {
+using org.jbox2d.collision;
+using org.jbox2d.common;using org.jbox2d.common;namespace org.jbox2d.dynamics.contacts {
 public class ContactPositionConstraint {
-  Vec2[] localPoints = new Vec2[Settings.maxManifoldPoints];
-  readonly Vec2 localNormal = new Vec2();
-  readonly Vec2 localPoint = new Vec2();
-  int indexA;
-  int indexB;
-  float invMassA, invMassB;
-  readonly Vec2 localCenterA = new Vec2();
-  readonly Vec2 localCenterB = new Vec2();
-  float invIA, invIB;
-  ManifoldType type;
-  float radiusA, radiusB;
-  int pointCount;
+ public   Vec2[] localPoints = new Vec2[Settings.maxManifoldPoints];
+  readonly  public Vec2 localNormal = new Vec2();
+  readonly  public Vec2 localPoint = new Vec2();
+ public   int indexA;
+ public   int indexB;
+ public   float invMassA, invMassB;
+  readonly  public Vec2 localCenterA = new Vec2();
+  readonly  public Vec2 localCenterB = new Vec2();
+ public   float invIA, invIB;
+ public   ManifoldType type;
+ public   float radiusA, radiusB;
+ public   int pointCount;
 
   public ContactPositionConstraint() {
-    for (int i = 0; i < localPoints.length; i++) {
+    for (int i = 0; i < localPoints.Length; i++) {
       localPoints[i] = new Vec2();
     }
   }

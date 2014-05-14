@@ -24,9 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.Distance.DistanceProxy;
-using org.jbox2d.common.Transform;
-/**
+using org.jbox2d.common;/**
  * Input for Distance.
  * You have to option to use the shape radii
  * in the computation.

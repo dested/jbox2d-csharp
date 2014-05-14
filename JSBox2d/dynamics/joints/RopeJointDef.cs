@@ -1,6 +1,5 @@
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 /**
  * Rope joint definition. This requires two body anchor points and a maximum lengths. Note: by
  * default the connected objects will not collide. see collideConnected in b2JointDef.

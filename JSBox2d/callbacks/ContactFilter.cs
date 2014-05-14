@@ -27,9 +27,7 @@
 
 
 using System;
-using org.jbox2d.dynamics.Filter;
-using org.jbox2d.dynamics.Fixture;
-// updated to rev 100
+using org.jbox2d.dynamics;using org.jbox2d.dynamics;// updated to rev 100
 /**
  * Implement this class to provide collision filtering. In other words, you can implement
  * this class if you want finer control over contact creation.

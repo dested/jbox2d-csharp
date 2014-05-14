@@ -24,15 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;/**
  * A circle shape.
  */
 namespace org.jbox2d.collision.shapes {
@@ -40,13 +32,13 @@ public class CircleShape : Shape {
 
   public readonly Vec2 m_p;
 
-  public CircleShape() {
-    super(ShapeType.CIRCLE);
+  public CircleShape():base(ShapeType.CIRCLE) {
+    
     m_p = new Vec2();
     m_radius = 0;
   }
 
-  public  Shape clone() {
+  public override Shape clone() {
     CircleShape shape = new CircleShape();
     shape.m_p.x = m_p.x;
     shape.m_p.y = m_p.y;
@@ -54,7 +46,8 @@ public class CircleShape : Shape {
     return shape;
   }
 
-  public  int getChildCount() {
+  public override int getChildCount()
+  {
     return 1;
   }
 
@@ -94,7 +87,6 @@ public class CircleShape : Shape {
    * @return
    */
   public  Vec2 getVertex( int index) {
-    assert (index == 0);
     return m_p;
   }
 

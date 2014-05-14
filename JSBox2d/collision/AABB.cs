@@ -24,12 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.pooling.IWorldPool;
-using org.jbox2d.pooling.normal.DefaultWorldPool;
-/** An axis-aligned bounding box. */
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.pooling;using org.jbox2d.pooling.normal;/** An axis-aligned bounding box. */
 namespace org.jbox2d.collision {
 public class AABB {
   /** Bottom left vertex of bounding box. */
@@ -50,8 +45,10 @@ public class AABB {
    * 
    * @param copy the object to copy from
    */
-  public AABB( AABB copy) {
-    this(copy.lowerBound, copy.upperBound);
+  public AABB(AABB copy)
+      : this(copy.lowerBound, copy.upperBound)
+  {
+    
   }
 
   /**
@@ -176,7 +173,7 @@ public class AABB {
    */
   public  bool contains( AABB aabb) {
     /*
-     * boolean result = true; result = result && lowerBound.x <= aabb.lowerBound.x; result = result
+     * bool result = true; result = result && lowerBound.x <= aabb.lowerBound.x; result = result
      * && lowerBound.y <= aabb.lowerBound.y; result = result && aabb.upperBound.x <= upperBound.x;
      * result = result && aabb.upperBound.y <= upperBound.y; return result;
      */
@@ -189,24 +186,24 @@ public class AABB {
   /**
    * @deprecated please use {@link #raycast(RayCastOutput, RayCastInput, IWorldPool)} for better
    *             performance
-   * @param out_put
+   * @param output
    * @param input
    * @return
    */
-  public  bool raycast( RayCastOutput out_put,  RayCastInput input) {
+  public  bool raycast( RayCastOutput output,  RayCastInput input) {
     return raycast(output, input, new DefaultWorldPool(4, 4));
   }
 
   /**
    * From Real-time Collision Detection, p179.
    * 
-   * @param out_put
+   * @param output
    * @param input
    */
-  public  bool raycast( RayCastOutput out_put,  RayCastInput input,
+  public  bool raycast( RayCastOutput output,  RayCastInput input,
       IWorldPool argPool) {
-    float tmin = -Float.MAX_VALUE;
-    float tmax = Float.MAX_VALUE;
+    float tmin = -float.MaxValue;
+    float tmax = float.MaxValue;
 
      Vec2 p = argPool.popVec2();
      Vec2 d = argPool.popVec2();
@@ -300,9 +297,9 @@ public class AABB {
     }
 
     // Intersection.
-    out_put.fraction = tmin;
-    out_put.normal.x = normal.x;
-    out_put.normal.y = normal.y;
+    output.fraction = tmin;
+    output.normal.x = normal.x;
+    output.normal.y = normal.y;
     argPool.pushVec2(4);
     return true;
   }
@@ -320,7 +317,7 @@ public class AABB {
   }
 
   
-  public  override string toString() {
+  public  override string ToString() {
      string s = "AABB[" + lowerBound + " . " + upperBound + "]";
     return s;
   }

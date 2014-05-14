@@ -24,80 +24,12 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.Collision;
-using org.jbox2d.collision.Distance;
-using org.jbox2d.collision.TimeOfImpact;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.Mat33;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.common.Vec3;
-using org.jbox2d.dynamics.contacts.Contact;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics.contacts;/**
  * World pool interface
  * @author Daniel
  *
  */
 namespace org.jbox2d.pooling {
 public interface IWorldPool {
-
-	public IDynamicStack<Contact> getPolyContactStack();
-
-	public IDynamicStack<Contact> getCircleContactStack();
-
-	public IDynamicStack<Contact> getPolyCircleContactStack();
-	
-    public IDynamicStack<Contact> getEdgeCircleContactStack();
-    
-    public IDynamicStack<Contact> getEdgePolyContactStack();
-
-    public IDynamicStack<Contact> getChainCircleContactStack();
-    
-    public IDynamicStack<Contact> getChainPolyContactStack();
-    
-	public Vec2 popVec2();
-
-	public Vec2[] popVec2(int num);
-
-	public void pushVec2(int num);
-
-	public Vec3 popVec3();
-
-	public Vec3[] popVec3(int num);
-
-	public void pushVec3(int num);
-
-	public Mat22 popMat22();
-
-	public Mat22[] popMat22(int num);
-
-	public void pushMat22(int num);
-	
-	public Mat33 popMat33();
-	
-	public void pushMat33(int num);
-
-	public AABB popAABB();
-
-	public AABB[] popAABB(int num);
-
-	public void pushAABB(int num);
-	
-	public Rot popRot();
-
-	public void pushRot(int num);
-	
-	public Collision getCollision();
-
-	public TimeOfImpact getTimeOfImpact();
-
-	public Distance getDistance();
-
-	public float[] getFloatArray(int argLength);
-
-	public int[] getIntArray(int argLength);
-
-	public Vec2[] getVec2Array(int argLength);
-}
+IDynamicStack<Contact> getPolyContactStack();IDynamicStack<Contact> getCircleContactStack();IDynamicStack<Contact> getPolyCircleContactStack();IDynamicStack<Contact> getEdgeCircleContactStack();IDynamicStack<Contact> getEdgePolyContactStack();IDynamicStack<Contact> getChainCircleContactStack();IDynamicStack<Contact> getChainPolyContactStack();Vec2 popVec2();Vec2[] popVec2(int num);void pushVec2(int num);Vec3 popVec3();Vec3[] popVec3(int num);void pushVec3(int num);Mat22 popMat22();Mat22[] popMat22(int num);void pushMat22(int num);Mat33 popMat33();void pushMat33(int num);AABB popAABB();AABB[] popAABB(int num);void pushAABB(int num);Rot popRot();void pushRot(int num);Collision getCollision();TimeOfImpact getTimeOfImpact();Distance getDistance();float[] getFloatArray(int argLength);int[] getIntArray(int argLength);Vec2[] getVec2Array(int argLength);}
 }

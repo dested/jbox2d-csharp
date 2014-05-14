@@ -30,14 +30,14 @@ using System.IO;
  * A 2-by-2 matrix. Stored in column-major order.
  */
 namespace org.jbox2d.common {
-public class Mat22 : Serializable {
+public class Mat22 {
   private static readonly long serialVersionUID = 2L;
 
   public readonly Vec2 ex, ey;
 
   /** Convert the matrix to printable format. */
   
-  public override string toString() {
+  public override string ToString() {
     string s = "";
     s += "[" + ex.x + "," + ey.x + "]";
     s += "[" + ex.y + "," + ey.y + "]";
@@ -252,7 +252,6 @@ public class Mat22 : Serializable {
   }
 
   public  void mulToOutUnsafe( Vec2 v,  Vec2 out_) {
-    assert (v != out_);
     out_.x = ex.x * v.x + ey.x * v.y;
     out_.y = ex.y * v.x + ey.y * v.y;
   }
@@ -344,8 +343,6 @@ public class Mat22 : Serializable {
   }
 
   public  void mulTransToOutUnsafe( Mat22 B,  Mat22 out_) {
-    assert (B != out_);
-    assert (this != out_);
     out_.ex.x = this.ex.x * B.ex.x + this.ex.y * B.ex.y;
     out_.ey.x = this.ex.x * B.ey.x + this.ex.y * B.ey.y;
     out_.ex.y = this.ey.x * B.ex.x + this.ey.y * B.ex.y;
@@ -443,7 +440,6 @@ public class Mat22 : Serializable {
   }
 
   public  static void mulToOutUnsafe( Mat22 R,  Vec2 v,  Vec2 out_) {
-    assert (v != out_);
     out_.x = R.ex.x * v.x + R.ey.x * v.y;
     out_.y = R.ex.y * v.x + R.ey.y * v.y;
   }
@@ -513,8 +509,6 @@ public class Mat22 : Serializable {
   }
 
   public  static void mulTransToOutUnsafe( Mat22 A,  Mat22 B,  Mat22 out_) {
-    assert (A != out_);
-    assert (B != out_);
     out_.ex.x = A.ex.x * B.ex.x + A.ex.y * B.ex.y;
     out_.ex.y = A.ey.x * B.ex.x + A.ey.y * B.ex.y;
     out_.ey.x = A.ex.x * B.ey.x + A.ex.y * B.ey.y;
@@ -554,26 +548,26 @@ public class Mat22 : Serializable {
   }
 
   
-  public override int hashCode() {
+  public override int GetHashCode() {
      int prime = 31;
     int result = 1;
-    result = prime * result + ((ex == null) ? 0 : ex.hashCode());
-    result = prime * result + ((ey == null) ? 0 : ey.hashCode());
+    result = prime * result + ((ex == null) ? 0 : ex.GetHashCode());
+    result = prime * result + ((ey == null) ? 0 : ey.GetHashCode());
     return result;
   }
 
   
-  public override bool equals(object obj) {
+  public override bool Equals(object obj) {
     if (this == obj) return true;
     if (obj == null) return false;
-    if (getClass() != obj.getClass()) return false;
+    if (GetType() != obj.GetType()) return false;
     Mat22 other = (Mat22) obj;
     if (ex == null) {
       if (other.ex != null) return false;
-    } else if (!ex.equals(other.ex)) return false;
+    } else if (!ex.Equals(other.ex)) return false;
     if (ey == null) {
       if (other.ey != null) return false;
-    } else if (!ey.equals(other.ey)) return false;
+    } else if (!ey.Equals(other.ey)) return false;
     return true;
   }
 }

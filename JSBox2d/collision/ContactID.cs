@@ -48,6 +48,9 @@
 /**
  * Contact ids to facilitate warm starting. Note: the ContactFeatures class is just embedded in here
  */
+
+using System;
+
 namespace org.jbox2d.collision {
 public class ContactID : IComparable<ContactID> {
 
@@ -100,9 +103,12 @@ public class ContactID : IComparable<ContactID> {
     typeB = 0;
   }
 
-  
-  public override int compareTo(ContactID o) {
-    return getKey() - o.getKey();
-  }
+   
+
+  public int CompareTo(ContactID o)
+  {
+      return getKey() - o.getKey();
+
+    }
 }
 }

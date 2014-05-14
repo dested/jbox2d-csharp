@@ -24,14 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;/**
  * A line segment (edge) shape. These can be connected in chains or loops to other edge shapes. The
  * connectivity information is used to ensure correct contact normals.
  * 
@@ -60,8 +53,9 @@ public class EdgeShape : Shape {
   public bool m_hasVertex0 = false, m_hasVertex3 = false;
 
 
-  public EdgeShape() {
-    super(ShapeType.EDGE);
+  public EdgeShape()
+      : base(ShapeType.EDGE)
+  { 
     m_radius = Settings.polygonRadius;
   }
 

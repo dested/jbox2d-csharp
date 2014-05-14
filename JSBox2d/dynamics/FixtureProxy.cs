@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-
+using org.jbox2d.collision;
 /**
  * This proxy is used internally to connect fixtures to the broad-phase.
  * 
@@ -33,9 +32,9 @@ using org.jbox2d.collision.AABB;
  */
 namespace org.jbox2d.dynamics {
 public class FixtureProxy {
-  readonly AABB aabb = new AABB();
-  Fixture fixture;
-  int childIndex;
-  int proxyId;
+  readonly  public AABB aabb = new AABB();
+  public Fixture fixture;
+  public int childIndex;
+  public int proxyId;
 }
 }

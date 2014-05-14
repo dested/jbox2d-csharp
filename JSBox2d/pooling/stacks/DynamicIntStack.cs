@@ -23,6 +23,8 @@
  ******************************************************************************/
 
 
+using System;
+
 namespace org.jbox2d.pooling.stacks {
 public class DynamicIntStack {
 
@@ -41,7 +43,6 @@ public class DynamicIntStack {
   }
 
   public int pop() {
-    assert (position > 0);
     return stack[--position];
   }
 
@@ -49,8 +50,8 @@ public class DynamicIntStack {
     if (position == size) {
       int[] old = stack;
       stack = new int[size * 2];
-      size = stack.length;
-      Array.Copy(old, 0, stack, 0, old.length);
+      size = stack.Length;
+      Array.Copy(old, 0, stack, 0, old.Length);
     }
     stack[position++] = i;
   }

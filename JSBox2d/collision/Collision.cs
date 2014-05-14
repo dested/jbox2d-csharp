@@ -24,19 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.Distance.SimplexCache;
-using org.jbox2d.collision.Manifold.ManifoldType;
-using org.jbox2d.collision.shapes.CircleShape;
-using org.jbox2d.collision.shapes.EdgeShape;
-using org.jbox2d.collision.shapes.PolygonShape;
-using org.jbox2d.collision.shapes.Shape;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.pooling.IWorldPool;
-/**
+  using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.pooling;/**
  * Functions used for computing contact points, distance queries, and TOI queries. Collision methods
  * are non-static for pooling speed, retrieve a collision object from the {@link SingletonPool}.
  * Should not be finalructed.
@@ -45,7 +33,7 @@ using org.jbox2d.pooling.IWorldPool;
  */
 namespace org.jbox2d.collision {
 public class Collision {
-  public static readonly int NULL_FEATURE = Integer.MAX_VALUE;
+  public static readonly int NULL_FEATURE = int.MaxValue;
 
   private readonly IWorldPool pool;
 
@@ -61,7 +49,7 @@ public class Collision {
 
   private readonly DistanceInput input = new DistanceInput();
   private readonly SimplexCache cache = new SimplexCache();
-  private readonly DistanceOutput out_put = new DistanceOutput();
+  private readonly DistanceOutput output = new DistanceOutput();
 
   /**
    * Determine if two generic shapes overlap.
@@ -84,7 +72,7 @@ public class Collision {
 
     pool.getDistance().distance(output, cache, input);
     // djm note: anything significant about 10.0f?
-    return out_put.distance < 10.0f * Settings.EPSILON;
+    return output.distance < 10.0f * Settings.EPSILON;
   }
 
   /**
@@ -146,7 +134,7 @@ public class Collision {
   public static  int clipSegmentToLine( ClipVertex[] vOut,  ClipVertex[] vIn,
        Vec2 normal, float offset, int vertexIndexA) {
 
-    // Start with no out_put points
+    // Start with no output points
     int numOut = 0;
      ClipVertex vIn0 = vIn[0];
      ClipVertex vIn1 = vIn[1];
@@ -176,10 +164,10 @@ public class Collision {
       vOutNO.v.y = vIn0v.y + interp * (vIn1v.y - vIn0v.y);
 
       // VertexA is hitting edgeB.
-      vOutNO.id.indexA = (byte) vertexIndexA;
+      vOutNO.id.indexA = (sbyte) vertexIndexA;
       vOutNO.id.indexB = vIn0.id.indexB;
-      vOutNO.id.typeA = (byte) ContactID.Type.VERTEX.ordinal();
-      vOutNO.id.typeB = (byte) ContactID.Type.FACE.ordinal();
+      vOutNO.id.typeA = (sbyte) (int)ContactID.Type.VERTEX;
+      vOutNO.id.typeB = (sbyte)(int)ContactID.Type.FACE;
       ++numOut;
     }
 
@@ -271,7 +259,7 @@ public class Collision {
 
     // Find the min separating edge.
     int normalIndex = 0;
-    float separation = -Float.MAX_VALUE;
+    float separation = -float.MaxValue;
      float radius = polygon.m_radius + circle.m_radius;
      int vertexCount = polygon.m_count;
     float s;
@@ -444,8 +432,6 @@ public class Collision {
 
      int count2 = poly2.m_count;
      Vec2[] vertices2 = poly2.m_vertices;
-
-    assert (0 <= edge1 && edge1 < count1);
     // Convert normal from poly1's frame into poly2's frame.
     // before inline:
     // // Vec2 normal1World = Mul(xf1.R, normals1[edge1]);
@@ -470,7 +456,7 @@ public class Collision {
 
     // Find support vertex on poly2 for -normal.
     int index = 0;
-    float minDot = Float.MAX_VALUE;
+    float minDot = float.MaxValue;
 
     for (int i = 0; i < count2; ++i) {
        Vec2 a = vertices2[i];
@@ -545,7 +531,7 @@ public class Collision {
     // Find edge normal on poly1 that has the largest projection onto d.
     int edge = 0;
     float dot;
-    float maxDot = -Float.MAX_VALUE;
+    float maxDot = -float.MaxValue;
     for (int i = 0; i < count1; i++) {
        Vec2 normal = normals1[i];
       dot = normal.x * dLocal1x + normal.y * dLocal1y;
@@ -616,8 +602,6 @@ public class Collision {
      Vec2[] vertices2 = poly2.m_vertices;
      Vec2[] normals2 = poly2.m_normals;
 
-    assert (0 <= edge1 && edge1 < count1);
-
      ClipVertex c0 = c[0];
      ClipVertex c1 = c[1];
      Rot xf1q = xf1.q;
@@ -639,7 +623,7 @@ public class Collision {
 
     // Find the incident edge on poly2.
     int index = 0;
-    float minDot = Float.MAX_VALUE;
+    float minDot = float.MaxValue;
     for (int i = 0; i < count2; ++i) {
       Vec2 b = normals2[i];
       float dot = normal1x * b.x + normal1y * b.y;
@@ -658,20 +642,20 @@ public class Collision {
     Vec2 out_ = c0.v;
     out_.x = (xf2q.c * v1.x - xf2q.s * v1.y) + xf2.p.x;
     out_.y = (xf2q.s * v1.x + xf2q.c * v1.y) + xf2.p.y;
-    c0.id.indexA = (byte) edge1;
-    c0.id.indexB = (byte) i1;
-    c0.id.typeA = (byte) ContactID.Type.FACE.ordinal();
-    c0.id.typeB = (byte) ContactID.Type.VERTEX.ordinal();
+    c0.id.indexA = (sbyte) edge1;
+    c0.id.indexB = (sbyte) i1;
+    c0.id.typeA = (sbyte)(int)ContactID.Type.FACE;
+    c0.id.typeB = (sbyte)(int)ContactID.Type.VERTEX;
 
     // c1.v = Mul(xf2, vertices2[i2]);
     Vec2 v2 = vertices2[i2];
     Vec2 out_1 = c1.v;
     out_1.x = (xf2q.c * v2.x - xf2q.s * v2.y) + xf2.p.x;
     out_1.y = (xf2q.s * v2.x + xf2q.c * v2.y) + xf2.p.y;
-    c1.id.indexA = (byte) edge1;
-    c1.id.indexB = (byte) i2;
-    c1.id.typeA = (byte) ContactID.Type.FACE.ordinal();
-    c1.id.typeB = (byte) ContactID.Type.VERTEX.ordinal();
+    c1.id.indexA = (sbyte) edge1;
+    c1.id.indexB = (sbyte) i2;
+    c1.id.typeA = (sbyte)(int)ContactID.Type.FACE;
+    c1.id.typeB = (sbyte)(int)ContactID.Type.VERTEX;
   }
 
   private readonly EdgeResults results1 = new EdgeResults();
@@ -845,7 +829,7 @@ public class Collision {
   private readonly Vec2 e = new Vec2();
   private readonly ContactID cf = new ContactID();
   private readonly Vec2 e1 = new Vec2();
-  private readonly Vec2 P = new Vec2();
+  private readonly Vec2 P2 = new Vec2();
   private readonly Vec2 n = new Vec2();
 
   // Compute contact points for edge versus circle.
@@ -872,7 +856,7 @@ public class Collision {
 
     // ContactFeature cf;
     cf.indexB = 0;
-    cf.typeB = (byte) ContactID.Type.VERTEX.ordinal();
+    cf.typeB = (sbyte)(int)ContactID.Type.VERTEX;
 
     // Region A
     if (v <= 0.0f) {
@@ -897,9 +881,9 @@ public class Collision {
       }
 
       cf.indexA = 0;
-      cf.typeA = (byte) ContactID.Type.VERTEX.ordinal();
+      cf.typeA = (sbyte)(int)ContactID.Type.VERTEX;
       manifold.pointCount = 1;
-      manifold.type = Manifold.ManifoldType.CIRCLES;
+      manifold.type = ManifoldType.CIRCLES;
       manifold.localNormal.setZero();
       manifold.localPoint.set(P);
       // manifold.points[0].id.key = 0;
@@ -932,9 +916,9 @@ public class Collision {
       }
 
       cf.indexA = 1;
-      cf.typeA = (byte) ContactID.Type.VERTEX.ordinal();
+      cf.typeA = (sbyte)(int)ContactID.Type.VERTEX;
       manifold.pointCount = 1;
-      manifold.type = Manifold.ManifoldType.CIRCLES;
+      manifold.type = ManifoldType.CIRCLES;
       manifold.localNormal.setZero();
       manifold.localPoint.set(P);
       // manifold.points[0].id.key = 0;
@@ -945,14 +929,13 @@ public class Collision {
 
     // Region AB
     float den = Vec2.dot(e, e);
-    assert (den > 0.0f);
 
     // Vec2 P = (1.0f / den) * (u * A + v * B);
-    P.set(A).mulLocal(u).addLocal(temp.set(B).mulLocal(v));
-    P.mulLocal(1.0f / den);
-    d.set(Q).subLocal(P);
-    float dd = Vec2.dot(d, d);
-    if (dd > radius * radius) {
+    P2.set(A).mulLocal(u).addLocal(temp.set(B).mulLocal(v));
+    P2.mulLocal(1.0f / den);
+    d.set(Q).subLocal(P2);
+    float dd2 = Vec2.dot(d, d);
+    if (dd2 > radius * radius) {
       return;
     }
 
@@ -964,9 +947,9 @@ public class Collision {
     n.normalize();
 
     cf.indexA = 0;
-    cf.typeA = (byte) ContactID.Type.FACE.ordinal();
+    cf.typeA = (sbyte)(int)ContactID.Type.FACE;
     manifold.pointCount = 1;
-    manifold.type = Manifold.ManifoldType.FACE_A;
+    manifold.type = ManifoldType.FACE_A;
     manifold.localNormal.set(n);
     manifold.localPoint.set(A);
     // manifold.points[0].id.key = 0;
@@ -986,7 +969,7 @@ public class Collision {
   /**
    * Java-specific class for returning edge results
    */
-  private  class EdgeResults {
+  public  class EdgeResults {
     public float separation;
     public int edgeIndex;
   }
@@ -1038,79 +1021,79 @@ public class Collision {
      */
     REMOVE_STATE
   }
-
+ public 
   /**
    * This structure is used to keep track of the best separating axis.
    */
    class EPAxis {
-    enum Type {
+ public     enum Type {
       UNKNOWN, EDGE_A, EDGE_B
     }
-
+ public 
     Type type;
-    int index;
-    float separation;
+ public     int index;
+ public     float separation;
   }
-
+ public 
   /**
    * This holds polygon B expressed in frame A.
    */
    class TempPolygon {
-    readonly Vec2[] vertices = new Vec2[Settings.maxPolygonVertices];
-    readonly Vec2[] normals = new Vec2[Settings.maxPolygonVertices];
-    int count;
+    readonly  public Vec2[] vertices = new Vec2[Settings.maxPolygonVertices];
+    readonly  public Vec2[] normals = new Vec2[Settings.maxPolygonVertices];
+ public     int count;
 
     public TempPolygon() {
-      for (int i = 0; i < vertices.length; i++) {
+      for (int i = 0; i < vertices.Length; i++) {
         vertices[i] = new Vec2();
         normals[i] = new Vec2();
       }
     }
   }
-
+ public 
   /**
    * Reference face used for clipping
    */
    class ReferenceFace {
-    int i1, i2;
-    readonly Vec2 v1 = new Vec2();
-    readonly Vec2 v2 = new Vec2();
-    readonly Vec2 normal = new Vec2();
+ public     int i1, i2;
+    readonly  public Vec2 v1 = new Vec2();
+    readonly  public Vec2 v2 = new Vec2();
+    readonly  public Vec2 normal = new Vec2();
 
-    readonly Vec2 sideNormal1 = new Vec2();
-    float sideOffset1;
+    readonly  public Vec2 sideNormal1 = new Vec2();
+ public     float sideOffset1;
 
-    readonly Vec2 sideNormal2 = new Vec2();
-    float sideOffset2;
+    readonly  public Vec2 sideNormal2 = new Vec2();
+ public     float sideOffset2;
   }
-
+ public 
   /**
    * This class collides and edge and a polygon, taking into account edge adjacency.
    */
    class EPCollider {
-    enum VertexType {
+ public     enum VertexType {
       ISOLATED, CONCAVE, CONVEX
     }
 
-    readonly TempPolygon m_polygonB = new TempPolygon();
+    readonly  public TempPolygon m_polygonB = new TempPolygon();
 
-    readonly Transform m_xf = new Transform();
-    readonly Vec2 m_centroidB = new Vec2();
-    Vec2 m_v0 = new Vec2();
-    Vec2 m_v1 = new Vec2();
-    Vec2 m_v2 = new Vec2();
-    Vec2 m_v3 = new Vec2();
-    readonly Vec2 m_normal0 = new Vec2();
-    readonly Vec2 m_normal1 = new Vec2();
-    readonly Vec2 m_normal2 = new Vec2();
-    readonly Vec2 m_normal = new Vec2();
-
+    readonly  public Transform m_xf = new Transform();
+    readonly  public Vec2 m_centroidB = new Vec2();
+ public     Vec2 m_v0 = new Vec2();
+ public     Vec2 m_v1 = new Vec2();
+ public     Vec2 m_v2 = new Vec2();
+ public     Vec2 m_v3 = new Vec2();
+    readonly  public Vec2 m_normal0 = new Vec2();
+    readonly  public Vec2 m_normal1 = new Vec2();
+    readonly  public Vec2 m_normal2 = new Vec2();
+    readonly  public Vec2 m_normal = new Vec2();
+ public 
     VertexType m_type1, m_type2;
 
-    readonly Vec2 m_lowerLimit = new Vec2();
-    readonly Vec2 m_upperLimit = new Vec2();
-    float m_radius;
-    bool m_front;
+    readonly  public Vec2 m_lowerLimit = new Vec2();
+    readonly  public Vec2 m_upperLimit = new Vec2();
+ public     float m_radius;
+ public     bool m_front;
 
     public EPCollider() {
       for (int i = 0; i < 2; i++) {
@@ -1376,7 +1359,7 @@ public class Collision {
        ClipVertex ie1 = ie[1];
       
       if (primaryAxis.type == EPAxis.Type.EDGE_A) {
-        manifold.type = Manifold.ManifoldType.FACE_A;
+        manifold.type = ManifoldType.FACE_A;
 
         // Search for the polygon normal that is most anti-parallel to the edge normal.
         int bestIndex = 0;
@@ -1394,15 +1377,15 @@ public class Collision {
 
         ie0.v.set(m_polygonB.vertices[i1]);
         ie0.id.indexA = 0;
-        ie0.id.indexB = (byte) i1;
-        ie0.id.typeA = (byte) ContactID.Type.FACE.ordinal();
-        ie0.id.typeB = (byte) ContactID.Type.VERTEX.ordinal();
+        ie0.id.indexB = (sbyte) i1;
+        ie0.id.typeA = (sbyte)(int)ContactID.Type.FACE;
+        ie0.id.typeB = (sbyte)(int)ContactID.Type.VERTEX;
 
         ie1.v.set(m_polygonB.vertices[i2]);
         ie1.id.indexA = 0;
-        ie1.id.indexB = (byte) i2;
-        ie1.id.typeA = (byte) ContactID.Type.FACE.ordinal();
-        ie1.id.typeB = (byte) ContactID.Type.VERTEX.ordinal();
+        ie1.id.indexB = (sbyte) i2;
+        ie1.id.typeA = (sbyte)(int)ContactID.Type.FACE;
+        ie1.id.typeB = (sbyte)(int)ContactID.Type.VERTEX;
 
         if (m_front) {
           rf.i1 = 0;
@@ -1418,19 +1401,19 @@ public class Collision {
           rf.normal.set(m_normal1).negateLocal();
         }
       } else {
-        manifold.type = Manifold.ManifoldType.FACE_B;
+        manifold.type = ManifoldType.FACE_B;
 
         ie0.v.set(m_v1);
         ie0.id.indexA = 0;
-        ie0.id.indexB = (byte) primaryAxis.index;
-        ie0.id.typeA = (byte) ContactID.Type.VERTEX.ordinal();
-        ie0.id.typeB = (byte) ContactID.Type.FACE.ordinal();
+        ie0.id.indexB = (sbyte) primaryAxis.index;
+        ie0.id.typeA = (sbyte)(int)ContactID.Type.VERTEX;
+        ie0.id.typeB = (sbyte)(int)ContactID.Type.FACE;
 
         ie1.v.set(m_v2);
         ie1.id.indexA = 0;
-        ie1.id.indexB = (byte) primaryAxis.index;
-        ie1.id.typeA = (byte) ContactID.Type.VERTEX.ordinal();
-        ie1.id.typeB = (byte) ContactID.Type.FACE.ordinal();
+        ie1.id.indexB = (sbyte) primaryAxis.index;
+        ie1.id.typeA = (sbyte)(int)ContactID.Type.VERTEX;
+        ie1.id.typeB = (sbyte) (int)ContactID.Type.FACE;
 
         rf.i1 = primaryAxis.index;
         rf.i2 = rf.i1 + 1 < m_polygonB.count ? rf.i1 + 1 : 0;
@@ -1502,7 +1485,7 @@ public class Collision {
     public void computeEdgeSeparation(EPAxis axis) {
       axis.type = EPAxis.Type.EDGE_A;
       axis.index = m_front ? 0 : 1;
-      axis.separation = Float.MAX_VALUE;
+      axis.separation = float.MaxValue;
       float nx = m_normal.x;
       float ny = m_normal.y;
 
@@ -1523,7 +1506,7 @@ public class Collision {
     public void computePolygonSeparation(EPAxis axis) {
       axis.type = EPAxis.Type.UNKNOWN;
       axis.index = -1;
-      axis.separation = -Float.MAX_VALUE;
+      axis.separation = -float.MaxValue;
       
       perp.x = -m_normal.y;
       perp.y = m_normal.x;

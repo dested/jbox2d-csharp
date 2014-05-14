@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 // updated to rev 100
 /**
  * A body definition holds all the data needed to construct a rigid body.

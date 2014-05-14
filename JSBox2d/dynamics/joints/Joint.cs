@@ -24,12 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.dynamics.World;
-using org.jbox2d.pooling.IWorldPool;
-// updated to rev 100
+using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.pooling;// updated to rev 100
 /**
  * The base joint class. Joints are used to constrain two bodies together in various fashions. Some
  * joints also feature limits and motors.
@@ -95,7 +90,6 @@ public abstract class Joint {
   // float m_invMassB, m_invIB;
 
   public Joint(IWorldPool worldPool, JointDef def) {
-    assert (def.bodyA != def.bodyB);
 
     pool = worldPool;
     m_type = def.type;

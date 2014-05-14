@@ -24,14 +24,7 @@
 
 
 using System;
-using org.jbox2d.callbacks.DebugDraw;
-using org.jbox2d.callbacks.PairCallback;
-using org.jbox2d.callbacks.TreeCallback;
-using org.jbox2d.callbacks.TreeRayCastCallback;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.common.Vec2;
-using System.Collections.Generic;
+using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using System.Collections.Generic;
 using System.Collections;
 /**
  * The broad-phase is used for computing pairs and performing volume queries and ray casts. This
@@ -187,24 +180,24 @@ public class BroadPhase : TreeCallback {
     Array.Sort(m_pairBuffer, 0, m_pairCount);
 
     // Send the pairs back to the client.
-    int i = 0;
-    while (i < m_pairCount) {
-      Pair primaryPair = m_pairBuffer[i];
+    int index0 = 0;
+    while (index0 < m_pairCount) {
+      Pair primaryPair = m_pairBuffer[index0];
       object userDataA = m_tree.getUserData(primaryPair.proxyIdA);
       object userDataB = m_tree.getUserData(primaryPair.proxyIdB);
 
       // log.debug("returning pair: "+userDataA+", "+userDataB);
       callback.addPair(userDataA, userDataB);
-      ++i;
+      ++index0;
 
       // Skip any duplicate pairs.
-      while (i < m_pairCount) {
-        Pair pair = m_pairBuffer[i];
+      while (index0 < m_pairCount) {
+        Pair pair = m_pairBuffer[index0];
         if (pair.proxyIdA != primaryPair.proxyIdA || pair.proxyIdB != primaryPair.proxyIdB) {
           break;
         }
         // log.debug("skipping duplicate");
-        ++i;
+        ++index0;
       }
     }
 
@@ -258,7 +251,7 @@ public class BroadPhase : TreeCallback {
       int[] old = m_moveBuffer;
       m_moveCapacity *= 2;
       m_moveBuffer = new int[m_moveCapacity];
-      Array.Copy(old, 0, m_moveBuffer, 0, old.length);
+      Array.Copy(old, 0, m_moveBuffer, 0, old.Length);
     }
 
     m_moveBuffer[m_moveCount] = proxyId;
@@ -289,8 +282,8 @@ public class BroadPhase : TreeCallback {
       Pair[] oldBuffer = m_pairBuffer;
       m_pairCapacity *= 2;
       m_pairBuffer = new Pair[m_pairCapacity];
-      Array.Copy(oldBuffer, 0, m_pairBuffer, 0, oldBuffer.length);
-      for (int i = oldBuffer.length; i < m_pairCapacity; i++) {
+      Array.Copy(oldBuffer, 0, m_pairBuffer, 0, oldBuffer.Length);
+      for (int i = oldBuffer.Length; i < m_pairCapacity; i++) {
         m_pairBuffer[i] = new Pair();
       }
     }

@@ -47,9 +47,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-//Updated to rev 56->130->142 of b2DistanceJoint.cpp/.h
+using org.jbox2d.common;using org.jbox2d.dynamics;//Updated to rev 56->130->142 of b2DistanceJoint.cpp/.h
 
 /**
  * Distance joint definition. This requires defining an

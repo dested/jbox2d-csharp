@@ -33,20 +33,23 @@ using System.Collections;
  */
 namespace org.jbox2d.pooling.arrays {
 public class FloatArray {
-	
-	private readonly Hashtable<int?, float[]> map = new Hashtable<int?, float[]>();
-	
-	public float[] get( int argLength){
-				
-		if(!map.containsKey(argLength)){
-			map.put(argLength, getInitializedArray(argLength));
-		}
-		
-		return map.get(argLength);
-	}
-	
-	public float[] getInitializedArray(int argLength){
-		return new float[argLength];
-	}
+
+    private readonly Dictionary<int, float[]> map = new Dictionary<int, float[]>();
+
+    public float[] get(int argLength)
+    {
+
+        if (!map.ContainsKey(argLength))
+        {
+            map[argLength] = getInitializedArray(argLength);
+        }
+
+        return map[argLength];
+    }
+
+    public float[] getInitializedArray(int argLength)
+    {
+        return new float[argLength];
+    }
 }
 }

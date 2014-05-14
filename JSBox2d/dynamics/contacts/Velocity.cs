@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 namespace org.jbox2d.dynamics.contacts {
 public class Velocity {
   public readonly Vec2 v = new Vec2();

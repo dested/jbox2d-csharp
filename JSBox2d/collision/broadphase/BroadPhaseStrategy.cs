@@ -1,11 +1,5 @@
 using System;
-using org.jbox2d.callbacks.DebugDraw;
-using org.jbox2d.callbacks.TreeCallback;
-using org.jbox2d.callbacks.TreeRayCastCallback;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.common.Vec2;
-namespace org.jbox2d.collision.broadphase {
+using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;namespace org.jbox2d.collision.broadphase {
 public interface BroadPhaseStrategy {
 
   /**
@@ -15,7 +9,7 @@ public interface BroadPhaseStrategy {
    * @param userData
    * @return
    */
-  int createProxy(AABB aabb, Object userData);
+  int createProxy(AABB aabb, object userData);
 
   /**
    * Destroy a proxy
@@ -30,9 +24,9 @@ public interface BroadPhaseStrategy {
    * 
    * @return true if the proxy was re-inserted.
    */
-  boolean moveProxy(int proxyId, AABB aabb, Vec2 displacement);
+  bool moveProxy(int proxyId, AABB aabb, Vec2 displacement);
 
-  Object getUserData(int proxyId);
+  object getUserData(int proxyId);
 
   AABB getFatAABB(int proxyId);
 

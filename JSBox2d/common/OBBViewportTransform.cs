@@ -40,10 +40,11 @@ public class OBBViewportTransform : IViewportTransform {
   public readonly OBB box = new OBB();
   private bool yFlip = false;
   private readonly Mat22 yFlipMat = new Mat22(1, 0, 0, -1);
-  private readonly Mat22 yFlipMatInv = yFlipMat.invert();
+  private readonly Mat22 yFlipMatInv ;
 
   public OBBViewportTransform() {
     box.R.setIdentity();
+      yFlipMatInv = yFlipMat.invert();
   }
 
   public void set(OBBViewportTransform vpt) {
@@ -138,7 +139,7 @@ public class OBBViewportTransform : IViewportTransform {
   }
 
   /**
-   * @see IViewportTransform#setYFlip(boolean)
+   * @see IViewportTransform#setYFlip(bool)
    */
   public void setYFlip(bool yFlip) {
     this.yFlip = yFlip;

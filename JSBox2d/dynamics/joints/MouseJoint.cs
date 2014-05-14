@@ -24,15 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;/**
  * A mouse joint is used to make a point on a body track a specified world point. This a soft
  * constraint with a maximum force. This allows the constraint to stretch and without applying huge
  * forces. NOTE: this joint is not documented in the manual because it was developed to be used in
@@ -63,12 +55,10 @@ public class MouseJoint : Joint {
   private readonly Mat22 m_mass = new Mat22();
   private readonly Vec2 m_C = new Vec2();
 
-  public MouseJoint(IWorldPool argWorld, MouseJointDef def) {
-    super(argWorld, def);
-    assert (def.target.isValid());
-    assert (def.maxForce >= 0);
-    assert (def.frequencyHz >= 0);
-    assert (def.dampingRatio >= 0);
+  public MouseJoint(IWorldPool argWorld, MouseJointDef def)
+      : base(argWorld, def)
+  {
+    
 
     m_targetA.set(def.target);
     Transform.mulTransToOutUnsafe(m_bodyB.getTransform(), m_targetA, m_localAnchorB);
@@ -173,7 +163,6 @@ public class MouseJoint : Joint {
     // gamma has units of inverse mass.
     // beta has units of inverse time.
     float h = data.step.dt;
-    assert (d + h * k > Settings.EPSILON);
     m_gamma = h * (d + h * k);
     if (m_gamma != 0.0f) {
       m_gamma = 1.0f / m_gamma;

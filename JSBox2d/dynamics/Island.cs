@@ -24,20 +24,7 @@
 
 
 using System;
-using org.jbox2d.callbacks.ContactImpulse;
-using org.jbox2d.callbacks.ContactListener;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Timer;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.contacts.Contact;
-using org.jbox2d.dynamics.contacts.ContactSolver.ContactSolverDef;
-using org.jbox2d.dynamics.contacts.ContactSolver;
-using org.jbox2d.dynamics.contacts.ContactVelocityConstraint;
-using org.jbox2d.dynamics.contacts.Position;
-using org.jbox2d.dynamics.contacts.Velocity;
-using org.jbox2d.dynamics.joints.Joint;
-/*
+using org.jbox2d.callbacks;using org.jbox2d.callbacks;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.joints;/*
  Position Correction Notes
  =========================
  I tried the several algorithms for position correction of the 2D revolute joint.
@@ -196,32 +183,32 @@ public class Island {
 
     m_listener = listener;
 
-    if (m_bodies == null || m_bodyCapacity > m_bodies.length) {
+    if (m_bodies == null || m_bodyCapacity > m_bodies.Length) {
       m_bodies = new Body[m_bodyCapacity];
     }
-    if (m_joints == null || m_jointCapacity > m_joints.length) {
+    if (m_joints == null || m_jointCapacity > m_joints.Length) {
       m_joints = new Joint[m_jointCapacity];
     }
-    if (m_contacts == null || m_contactCapacity > m_contacts.length) {
+    if (m_contacts == null || m_contactCapacity > m_contacts.Length) {
       m_contacts = new Contact[m_contactCapacity];
     }
 
     // dynamic array
-    if (m_velocities == null || m_bodyCapacity > m_velocities.length) {
+    if (m_velocities == null || m_bodyCapacity > m_velocities.Length) {
        Velocity[] old = m_velocities == null ? new Velocity[0] : m_velocities;
       m_velocities = new Velocity[m_bodyCapacity];
-      Array.Copy(old, 0, m_velocities, 0, old.length);
-      for (int i = old.length; i < m_velocities.length; i++) {
+      Array.Copy(old, 0, m_velocities, 0, old.Length);
+      for (int i = old.Length; i < m_velocities.Length; i++) {
         m_velocities[i] = new Velocity();
       }
     }
 
     // dynamic array
-    if (m_positions == null || m_bodyCapacity > m_positions.length) {
+    if (m_positions == null || m_bodyCapacity > m_positions.Length) {
        Position[] old = m_positions == null ? new Position[0] : m_positions;
       m_positions = new Position[m_bodyCapacity];
-      Array.Copy(old, 0, m_positions, 0, old.length);
-      for (int i = old.length; i < m_positions.length; i++) {
+      Array.Copy(old, 0, m_positions, 0, old.Length);
+      for (int i = old.Length; i < m_positions.Length; i++) {
         m_positions[i] = new Position();
       }
     }
@@ -397,7 +384,7 @@ public class Island {
     report(contactSolver.m_velocityConstraints);
 
     if (allowSleep) {
-      float minSleepTime = Float.MAX_VALUE;
+      float minSleepTime = float.MaxValue;
 
        float linTolSqr = Settings.linearSleepTolerance * Settings.linearSleepTolerance;
        float angTolSqr = Settings.angularSleepTolerance * Settings.angularSleepTolerance;
@@ -432,8 +419,6 @@ public class Island {
   private readonly ContactSolverDef toiSolverDef = new ContactSolverDef();
 
   public void solveTOI(TimeStep subStep, int toiIndexA, int toiIndexB) {
-    assert (toiIndexA < m_bodyCount);
-    assert (toiIndexB < m_bodyCount);
 
     // Initialize the body state.
     for (int i = 0; i < m_bodyCount; ++i) {
@@ -562,19 +547,16 @@ public class Island {
   }
 
   public void add(Body body) {
-    assert (m_bodyCount < m_bodyCapacity);
     body.m_islandIndex = m_bodyCount;
     m_bodies[m_bodyCount] = body;
     ++m_bodyCount;
   }
 
   public void add(Contact contact) {
-    assert (m_contactCount < m_contactCapacity);
     m_contacts[m_contactCount++] = contact;
   }
 
   public void add(Joint joint) {
-    assert (m_jointCount < m_jointCapacity);
     m_joints[m_jointCount++] = joint;
   }
 

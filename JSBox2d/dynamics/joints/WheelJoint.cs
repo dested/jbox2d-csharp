@@ -24,14 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-//Linear constraint (point-to-line)
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.pooling;//Linear constraint (point-to-line)
 //d = pB - pA = xB + rB - xA - rA
 //C = dot(ay, d)
 //Cdot = dot(d, cross(wA, ay)) + dot(ay, vB + cross(wB, rB) - vA - cross(wA, rA))
@@ -97,8 +90,7 @@ public class WheelJoint : Joint {
   private float m_bias;
   private float m_gamma;
 
-  public WheelJoint(IWorldPool argPool, WheelJointDef def) {
-    super(argPool, def);
+  public WheelJoint(IWorldPool argPool, WheelJointDef def):base(argPool,def) {
     m_localAnchorA.set(def.localAnchorA);
     m_localAnchorB.set(def.localAnchorB);
     m_localXAxisA.set(def.localAxisA);
@@ -226,7 +218,7 @@ public class WheelJoint : Joint {
   // pooling
   private readonly Vec2 rA = new Vec2();
   private readonly Vec2 rB = new Vec2();
-  private readonly Vec2 d = new Vec2();
+  private readonly Vec2 d2 = new Vec2();
 
   
   public override void initVelocityConstraints(SolverData data) {
@@ -262,12 +254,12 @@ public class WheelJoint : Joint {
     // Compute the effective masses.
     Rot.mulToOutUnsafe(qA, temp.set(m_localAnchorA).subLocal(m_localCenterA), rA);
     Rot.mulToOutUnsafe(qB, temp.set(m_localAnchorB).subLocal(m_localCenterB), rB);
-    d.set(cB).addLocal(rB).subLocal(cA).subLocal(rA);
+    d2.set(cB).addLocal(rB).subLocal(cA).subLocal(rA);
 
     // Point to line constraint
     {
       Rot.mulToOut(qA, m_localYAxisA, m_ay);
-      m_sAy = Vec2.cross(temp.set(d).addLocal(rA), m_ay);
+      m_sAy = Vec2.cross(temp.set(d2).addLocal(rA), m_ay);
       m_sBy = Vec2.cross(rB, m_ay);
 
       m_mass = mA + mB + iA * m_sAy * m_sAy + iB * m_sBy * m_sBy;
@@ -283,7 +275,7 @@ public class WheelJoint : Joint {
     m_gamma = 0.0f;
     if (m_frequencyHz > 0.0f) {
       Rot.mulToOut(qA, m_localXAxisA, m_ax);
-      m_sAx = Vec2.cross(temp.set(d).addLocal(rA), m_ax);
+      m_sAx = Vec2.cross(temp.set(d2).addLocal(rA), m_ax);
       m_sBx = Vec2.cross(rB, m_ax);
 
       float invMass = mA + mB + iA * m_sAx * m_sAx + iB * m_sBx * m_sBx;
@@ -291,7 +283,7 @@ public class WheelJoint : Joint {
       if (invMass > 0.0f) {
         m_springMass = 1.0f / invMass;
 
-        float C = Vec2.dot(d, m_ax);
+        float C = Vec2.dot(d2, m_ax);
 
         // Frequency
         float omega = 2.0f * MathUtils.PI * m_frequencyHz;
@@ -455,15 +447,15 @@ public class WheelJoint : Joint {
 
     Rot.mulToOut(qA, temp.set(m_localAnchorA).subLocal(m_localCenterA), rA);
     Rot.mulToOut(qB, temp.set(m_localAnchorB).subLocal(m_localCenterB), rB);
-    d.set(cB).subLocal(cA).addLocal(rB).subLocal(rA);
+    d2.set(cB).subLocal(cA).addLocal(rB).subLocal(rA);
 
     Vec2 ay = pool.popVec2();
     Rot.mulToOut(qA, m_localYAxisA, ay);
 
-    float sAy = Vec2.cross(temp.set(d).addLocal(rA), ay);
+    float sAy = Vec2.cross(temp.set(d2).addLocal(rA), ay);
     float sBy = Vec2.cross(rB, ay);
 
-    float C = Vec2.dot(d, ay);
+    float C = Vec2.dot(d2, ay);
 
     float k = m_invMassA + m_invMassB + m_invIA * m_sAy * m_sAy + m_invIB * m_sBy * m_sBy;
 

@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.shapes.Shape;
-
+using org.jbox2d.collision.shapes;
 // updated to rev 100
 /**
  * A fixture definition is used to create a fixture. This class defines an

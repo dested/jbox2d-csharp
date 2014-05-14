@@ -27,11 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Color3f;
-using org.jbox2d.common.IViewportTransform;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-// updated to rev 100
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;// updated to rev 100
 /**
  * Implement this abstract class to allow JBox2d to 
  * automatically draw your physics for debugging purposes.

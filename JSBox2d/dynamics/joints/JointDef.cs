@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.dynamics.Body;
-
+using org.jbox2d.dynamics;
 /**
  * Joint definitions are used to construct joints.
  * @author Daniel Murphy

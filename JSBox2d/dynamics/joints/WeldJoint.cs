@@ -27,15 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Mat33;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.common.Vec3;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-//Point-to-point constraint
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;//Point-to-point constraint
 //C = p2 - p1
 //Cdot = v2 - v1
 //   = v2 + cross(w2, r2) - v1 - cross(w1, r1)
@@ -83,8 +75,9 @@ public class WeldJoint : Joint {
   private float m_invIB;
   private readonly Mat33 m_mass = new Mat33();
 
-  public WeldJoint(IWorldPool argWorld, WeldJointDef def) {
-    super(argWorld, def);
+  public WeldJoint(IWorldPool argWorld, WeldJointDef def)
+      : base(argWorld, def)
+  {
     m_localAnchorA = new Vec2(def.localAnchorA);
     m_localAnchorB = new Vec2(def.localAnchorB);
     m_referenceAngle = def.referenceAngle;

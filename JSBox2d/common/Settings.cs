@@ -24,9 +24,12 @@
 
 
 /**
- * Global tuning constants based on MKS units and various integer maximums (vertices per shape,
+ * Global tuning constants based on MKS units and various int maximums (vertices per shape,
  * pairs, etc.).
  */
+
+using System;
+
 namespace org.jbox2d.common {
 public class Settings {
 

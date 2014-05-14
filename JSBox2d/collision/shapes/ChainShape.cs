@@ -25,15 +25,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.RayCastInput;
-using org.jbox2d.collision.RayCastOutput;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-/**
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;/**
  * A chain shape is a free form sequence of line segments. The chain has two-sided collision, so you
  * can use inside and outside collision. Therefore, you may use any winding order. Since there may
  * be many vertices, they are allocated using Alloc. Connectivity information is used to create
@@ -51,8 +43,10 @@ public class ChainShape : Shape {
 
   private readonly EdgeShape pool0 = new EdgeShape();
 
-  public ChainShape() {
-    super(ShapeType.CHAIN);
+  public ChainShape()
+      : base(ShapeType.CHAIN)
+  {
+    
     m_vertices = null;
     m_radius = Settings.polygonRadius;
     m_count = 0;
@@ -67,7 +61,6 @@ public class ChainShape : Shape {
    * Get a child edge.
    */
   public void getChildEdge(EdgeShape edge, int index) {
-    assert (0 <= index && index < m_count - 1);
     edge.m_radius = m_radius;
     
      Vec2 v0 = m_vertices[index + 0];
@@ -107,7 +100,6 @@ public class ChainShape : Shape {
 
   
   public override bool raycast(RayCastOutput output, RayCastInput input, Transform xf, int childIndex) {
-    assert (childIndex < m_count);
 
      EdgeShape edgeShape = pool0;
 
@@ -128,7 +120,6 @@ public class ChainShape : Shape {
 
   
   public override void computeAABB(AABB aabb, Transform xf, int childIndex) {
-    assert (childIndex < m_count);
      Vec2 lower = aabb.lowerBound;
      Vec2 upper = aabb.upperBound;
     
@@ -178,8 +169,6 @@ public class ChainShape : Shape {
    * @param count the vertex count
    */
   public void createLoop( Vec2[] vertices, int count) {
-    assert (m_vertices == null && m_count == 0);
-    assert (count >= 3);
     m_count = count + 1;
     m_vertices = new Vec2[m_count];
     for (int i = 1; i < count; i++) {
@@ -207,8 +196,6 @@ public class ChainShape : Shape {
    * @param count the vertex count
    */
   public void createChain( Vec2 [] vertices, int count) {
-    assert (m_vertices == null && m_count == 0);
-    assert (count >= 2);
     m_count = count;
     m_vertices = new Vec2[m_count];
     for (int i = 1; i < m_count; i++) {

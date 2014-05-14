@@ -24,18 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.broadphase.BroadPhase;
-using org.jbox2d.collision.shapes.MassData;
-using org.jbox2d.collision.shapes.Shape;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Sweep;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.contacts.Contact;
-using org.jbox2d.dynamics.contacts.ContactEdge;
-using org.jbox2d.dynamics.joints.JointEdge;
-/**
+using org.jbox2d.collision.broadphase;using org.jbox2d.collision.shapes;using org.jbox2d.collision.shapes;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.joints;/**
  * A rigid body. These are created via World.createBody.
  * 
  * @author Daniel Murphy
@@ -97,11 +86,6 @@ public class Body {
 
 
   public Body( BodyDef bd, World world) {
-    assert (bd.position.isValid());
-    assert (bd.linearVelocity.isValid());
-    assert (bd.gravityScale >= 0.0f);
-    assert (bd.angularDamping >= 0.0f);
-    assert (bd.linearDamping >= 0.0f);
 
     m_flags = 0;
 
@@ -179,7 +163,6 @@ public class Body {
    * @warning This function is locked during callbacks.
    */
   public  Fixture createFixture(FixtureDef def) {
-    assert (m_world.isLocked() == false);
 
     if (m_world.isLocked() == true) {
       return null;
@@ -239,15 +222,11 @@ public class Body {
    * @warning This function is locked during callbacks.
    */
   public  void destroyFixture(Fixture fixture) {
-    assert (m_world.isLocked() == false);
     if (m_world.isLocked() == true) {
       return;
     }
 
-    assert (fixture.m_body == this);
-
     // Remove the fixture from this body's singly linked list.
-    assert (m_fixtureCount > 0);
     Fixture node = m_fixtureList;
     Fixture last = null; // java change
     bool found = false;
@@ -262,7 +241,6 @@ public class Body {
     }
 
     // You tried to remove a shape that is not attached to this body.
-    assert (found);
 
     // java change, remove it from the list
     if (last == null) {
@@ -311,7 +289,6 @@ public class Body {
    * @param angle the world rotation in radians.
    */
   public  void setTransform(Vec2 position, float angle) {
-    assert (m_world.isLocked() == false);
     if (m_world.isLocked() == true) {
       return;
     }
@@ -606,7 +583,6 @@ public class Body {
    */
   public  void setMassData(MassData massData) {
     // TODO_ERIN adjust linear velocity and torque to account for movement of center.
-    assert (m_world.isLocked() == false);
     if (m_world.isLocked() == true) {
       return;
     }
@@ -628,7 +604,6 @@ public class Body {
 
     if (massData.I > 0.0f && (m_flags & e_fixedRotationFlag) == 0) {
       m_I = massData.I - m_mass * Vec2.dot(massData.center, massData.center);
-      assert (m_I > 0.0f);
       m_invI = 1.0f / m_I;
     }
 
@@ -674,8 +649,6 @@ public class Body {
       return;
     }
 
-    assert (m_type == BodyType.DYNAMIC);
-
     // Accumulate mass over all fixtures.
      Vec2 localCenter = m_world.getPool().popVec2();
     localCenter.setZero();
@@ -706,7 +679,6 @@ public class Body {
     if (m_I > 0.0f && (m_flags & e_fixedRotationFlag) == 0) {
       // Center the inertia about the center of mass.
       m_I -= m_mass * Vec2.dot(localCenter, localCenter);
-      assert (m_I > 0.0f);
       m_invI = 1.0f / m_I;
     } else {
       m_I = 0.0f;
@@ -869,7 +841,6 @@ public class Body {
    * @param type
    */
   public void setType(BodyType type) {
-    assert (m_world.isLocked() == false);
     if (m_world.isLocked() == true) {
       return;
     }
@@ -995,7 +966,6 @@ public class Body {
    * @param flag
    */
   public void setActive(bool flag) {
-    assert (m_world.isLocked() == false);
 
     if (flag == isActive()) {
       return;

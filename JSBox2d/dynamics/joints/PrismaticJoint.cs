@@ -24,17 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.Mat33;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.common.Vec3;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-//Linear constraint (point-to-line)
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.pooling;//Linear constraint (point-to-line)
 //d = p2 - p1 = x2 + r2 - x1 - r1
 //C = dot(perp, d)
 //Cdot = dot(d, cross(w1, perp)) + dot(perp, v2 + cross(w2, r2) - v1 - cross(w1, r1))
@@ -142,8 +132,9 @@ public class PrismaticJoint : Joint {
   private readonly Mat33 m_K;
   private float m_motorMass; // effective mass for motor/limit translational constraint.
 
-  public PrismaticJoint(IWorldPool argWorld, PrismaticJointDef def) {
-    super(argWorld, def);
+  public PrismaticJoint(IWorldPool argWorld, PrismaticJointDef def)
+      : base(argWorld, def)
+  {
     m_localAnchorA = new Vec2(def.localAnchorA);
     m_localAnchorB = new Vec2(def.localAnchorB);
     m_localXAxisA = new Vec2(def.localAxisA);
@@ -306,7 +297,6 @@ public class PrismaticJoint : Joint {
    * @param upper
    */
   public void setLimits(float lower, float upper) {
-    assert (lower <= upper);
     if (lower != m_lowerTranslation || upper != m_upperTranslation) {
       m_bodyA.setAwake(true);
       m_bodyB.setAwake(true);

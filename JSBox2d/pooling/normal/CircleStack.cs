@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.pooling.IOrderedStack;
-
+using org.jbox2d.pooling;
 namespace org.jbox2d.pooling.normal {
 public abstract class CircleStack<E> : IOrderedStack <E> {
 
@@ -68,7 +67,7 @@ public abstract class CircleStack<E> : IOrderedStack <E> {
   }
 
   
-  public override void push(int argNum) {}
+  public   void push(int argNum) {}
 
   /** Creates a new instance of the object contained by this stack. */
   public abstract E newInstance();

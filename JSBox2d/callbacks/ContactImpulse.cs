@@ -27,8 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Settings;
-
+using org.jbox2d.common;
 /**
  * Contact impulses for reporting. Impulses are used instead of forces because sub-step forces may
  * approach infinity for rigid body collisions. These match up one-to-one with the contact points in

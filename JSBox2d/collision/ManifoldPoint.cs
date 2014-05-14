@@ -47,8 +47,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 // updated to rev 100
 /**
  * A manifold point is a contact point belonging to a contact

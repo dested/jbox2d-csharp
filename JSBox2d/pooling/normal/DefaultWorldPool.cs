@@ -27,27 +27,7 @@
 
 
 using System;
-using org.jbox2d.collision.AABB;
-using org.jbox2d.collision.Collision;
-using org.jbox2d.collision.Distance;
-using org.jbox2d.collision.TimeOfImpact;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.Mat33;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.common.Vec3;
-using org.jbox2d.dynamics.contacts.ChainAndCircleContact;
-using org.jbox2d.dynamics.contacts.ChainAndPolygonContact;
-using org.jbox2d.dynamics.contacts.CircleContact;
-using org.jbox2d.dynamics.contacts.Contact;
-using org.jbox2d.dynamics.contacts.EdgeAndCircleContact;
-using org.jbox2d.dynamics.contacts.EdgeAndPolygonContact;
-using org.jbox2d.dynamics.contacts.PolygonAndCircleContact;
-using org.jbox2d.dynamics.contacts.PolygonContact;
-using org.jbox2d.pooling.IDynamicStack;
-using org.jbox2d.pooling.IWorldPool;
-using System.Collections.Generic;
+using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.collision;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.dynamics.contacts;using org.jbox2d.pooling;using org.jbox2d.pooling;using System.Collections.Generic;
 using System.Collections;
 /**
  * Provides object pooling for all objects used in the engine. Objects retrieved from here should
@@ -65,77 +45,81 @@ public class DefaultWorldPool : IWorldPool {
   private readonly OrderedStack<AABB> aabbs;
   private readonly OrderedStack<Rot> rots;
 
-  private readonly Hashtable<int?, float[]> afloats = new Hashtable<int?, float[]>();
-  private readonly Hashtable<int?, int[]> aints = new Hashtable<int?, int[]>();
-  private readonly Hashtable<int?, Vec2[]> avecs = new Hashtable<int?, Vec2[]>();
+  private readonly Dictionary<int, float[]> afloats = new Dictionary<int, float[]>();
+  private readonly Dictionary<int, int[]> aints = new Dictionary<int, int[]>();
+  private readonly Dictionary<int, Vec2[]> avecs = new Dictionary<int, Vec2[]>();
 
-  private readonly IWorldPool world = this;
-/*
+  private readonly IWorldPool world;
 
-  private readonly MutableStack<Contact> pcstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new PolygonContact(world); }
-    };
-
-  private readonly MutableStack<Contact> ccstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new CircleContact(world); }
-    };
-
-  private readonly MutableStack<Contact> cpstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new PolygonAndCircleContact(world); }
-    };
-
-  private readonly MutableStack<Contact> ecstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new EdgeAndCircleContact(world); }
-    };
-
-  private readonly MutableStack<Contact> epstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new EdgeAndPolygonContact(world); }
-    };
-
-  private readonly MutableStack<Contact> chcstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new ChainAndCircleContact(world); }
-    };
-
-  private readonly MutableStack<Contact> chpstack =
-    new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
-      public Contact newInstance () { return new ChainAndPolygonContact(world); }
-    };
+ 
 
   private readonly Collision collision;
   private readonly TimeOfImpact toi;
   private readonly Distance dist;
 
+      private readonly MutableStack<Contact> pcstack;
+    
+  private readonly MutableStack<Contact> ccstack;
+
+  private readonly MutableStack<Contact> cpstack;
+
+  private readonly MutableStack<Contact> ecstack;
+
+  private readonly MutableStack<Contact> epstack;
+
+  private readonly MutableStack<Contact> chcstack;
+
+  private readonly MutableStack<Contact> chpstack;
+
   public DefaultWorldPool(int argSize, int argContainerSize) {
+      pcstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new PolygonContact(world)
+      };
+      ccstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new CircleContact(world)
+      };
+      cpstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new PolygonAndCircleContact(world)
+      };
+      ecstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new EdgeAndCircleContact(world)
+      };
+      epstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new EdgeAndPolygonContact(world)
+      };
+      chcstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new ChainAndCircleContact(world)
+      };
+      chpstack = new MutableStack<Contact>(Settings.CONTACT_STACK_INIT_SIZE) {
+          newInstance = ()=>new ChainAndPolygonContact(world)
+      };
+
+      world = this;
+
     vecs = new OrderedStack<Vec2>(argSize, argContainerSize) {
-      public Vec2 newInstance() { return new Vec2(); }
+      newInstance=()=>new Vec2()
     };
     vec3s = new OrderedStack<Vec3>(argSize, argContainerSize) {
-      public Vec3 newInstance() { return new Vec3(); }
+      newInstance=()=>new Vec3()
     };
     mats = new OrderedStack<Mat22>(argSize, argContainerSize) {
-      public Mat22 newInstance() { return new Mat22(); }
+      newInstance=()=>new Mat22()
     };
     aabbs = new OrderedStack<AABB>(argSize, argContainerSize) {
-      public AABB newInstance() { return new AABB(); }
+      newInstance=()=>new AABB()
     };
     rots = new OrderedStack<Rot>(argSize, argContainerSize) {
-      public Rot newInstance() { return new Rot(); }
+      newInstance=()=>new Rot()
     };
     mat33s = new OrderedStack<Mat33>(argSize, argContainerSize) {
-      public Mat33 newInstance() { return new Mat33(); }
+      newInstance=()=>new Mat33()
     };
 
     dist = new Distance();
     collision = new Collision(this);
     toi = new TimeOfImpact(this);
   }
-*/
+
 
   public  IDynamicStack<Contact> getPolyContactStack() {
     return pcstack;
@@ -150,22 +134,22 @@ public class DefaultWorldPool : IWorldPool {
   }
 
   
-  public override IDynamicStack<Contact> getEdgeCircleContactStack() {
+  public   IDynamicStack<Contact> getEdgeCircleContactStack() {
     return ecstack;
   }
 
   
-  public override IDynamicStack<Contact> getEdgePolyContactStack() {
+  public   IDynamicStack<Contact> getEdgePolyContactStack() {
     return epstack;
   }
 
   
-  public override IDynamicStack<Contact> getChainCircleContactStack() {
+  public   IDynamicStack<Contact> getChainCircleContactStack() {
     return chcstack;
   }
 
   
-  public override IDynamicStack<Contact> getChainPolyContactStack() {
+  public   IDynamicStack<Contact> getChainPolyContactStack() {
     return chpstack;
   }
 
@@ -246,31 +230,33 @@ public class DefaultWorldPool : IWorldPool {
   }
 
   public  float[] getFloatArray(int argLength) {
-    if (!afloats.containsKey(argLength)) {
-      afloats.put(argLength, new float[argLength]);
+    if (!afloats.ContainsKey(argLength))
+    {
+        afloats[argLength] = new float[argLength];
     }
 
-    return afloats.get(argLength);
+    return afloats[argLength];
   }
 
   public  int[] getIntArray(int argLength) {
-    if (!aints.containsKey(argLength)) {
-      aints.put(argLength, new int[argLength]);
+    if (!aints.ContainsKey(argLength)) {
+        aints[argLength] = new int[argLength];
+
     }
 
-    return aints.get(argLength);
+    return aints[argLength];
   }
 
   public  Vec2[] getVec2Array(int argLength) {
-    if (!avecs.containsKey(argLength)) {
+    if (!avecs.ContainsKey(argLength)) {
       Vec2[] ray = new Vec2[argLength];
       for (int i = 0; i < argLength; i++) {
         ray[i] = new Vec2();
       }
-      avecs.put(argLength, ray);
+      avecs[argLength]=ray;
     }
 
-    return avecs.get(argLength);
+    return avecs[argLength];
   }
 }
 }

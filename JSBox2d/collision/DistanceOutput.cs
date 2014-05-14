@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 /**
  * Output for Distance.
  * @author Daniel

@@ -24,22 +24,35 @@
 
 
 using System;
-using org.jbox2d.collision.Distance.DistanceProxy;
-using org.jbox2d.collision.Distance.SimplexCache;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Sweep;
-using org.jbox2d.common.Transform;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.pooling.IWorldPool;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.pooling;/**
  * Class used for computing the time of impact. This class should not be constructed usually, just
  * retrieve from the {@link SingletonPool#getTOI()}.
  * 
  * @author daniel
  */
 namespace org.jbox2d.collision {
+    public class TOIInput
+    {
+        public readonly DistanceProxy proxyA = new DistanceProxy();
+        public readonly DistanceProxy proxyB = new DistanceProxy();
+        public readonly Sweep sweepA = new Sweep();
+        public readonly Sweep sweepB = new Sweep();
+        /**
+         * defines sweep interval [0, tMax]
+         */
+        public float tMax;
+    }
+
+    public class TOIOutput
+    {
+        public TOIOutputState state;
+        public float t;
+    }
+
+    public enum TOIOutputState
+    {
+        UNKNOWN, FAILED, OVERLAPPED, TOUCHING, SEPARATED
+    }
 public class TimeOfImpact {
   public static readonly int MAX_ITERATIONS = 1000;
 
@@ -54,30 +67,13 @@ public class TimeOfImpact {
    * 
    * @author Daniel Murphy
    */
-  public  class TOIInput {
-    public readonly DistanceProxy proxyA = new DistanceProxy();
-    public readonly DistanceProxy proxyB = new DistanceProxy();
-    public readonly Sweep sweepA = new Sweep();
-    public readonly Sweep sweepB = new Sweep();
-    /**
-     * defines sweep interval [0, tMax]
-     */
-    public float tMax;
-  }
 
-  public  enum TOIOutputState {
-    UNKNOWN, FAILED, OVERLAPPED, TOUCHING, SEPARATED
-  }
 
   /**
    * Output parameters for TimeOfImpact
    * 
    * @author daniel
    */
-  public  class TOIOutput {
-    public TOIOutputState state;
-    public float t;
-  }
 
 
   // djm pooling
@@ -133,8 +129,6 @@ public class TimeOfImpact {
     // djm: whats with all these constants?
     float target = MathUtils.max(Settings.linearSlop, totalRadius - 3.0f * Settings.linearSlop);
     float tolerance = 0.25f * Settings.linearSlop;
-
-    assert (target > tolerance);
 
     float t1 = 0f;
     int iter = 0;
@@ -343,7 +337,6 @@ class SeparationFunction {
     m_proxyA = proxyA;
     m_proxyB = proxyB;
     int count = cache.count;
-    assert (0 < count && count < 3);
 
     m_sweepA = sweepA;
     m_sweepB = sweepB;
@@ -434,7 +427,8 @@ class SeparationFunction {
     m_sweepB.getTransform(xfb, t);
 
     switch (m_type) {
-      case POINTS: {
+        case Type.POINTS:
+            {
         Rot.mulTransUnsafe(xfa.q, m_axis, axisA);
         Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
         m_axis.negateLocal();
@@ -451,7 +445,8 @@ class SeparationFunction {
         float separation = Vec2.dot(pointB.subLocal(pointA), m_axis);
         return separation;
       }
-      case FACE_A: {
+        case Type.FACE_A:
+            {
         Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
         Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
 
@@ -467,7 +462,8 @@ class SeparationFunction {
         float separation = Vec2.dot(pointB.subLocal(pointA), normal);
         return separation;
       }
-      case FACE_B: {
+        case Type.FACE_B:
+            {
         Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
         Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
 
@@ -484,7 +480,6 @@ class SeparationFunction {
         return separation;
       }
       default:
-        assert (false);
         indexes[0] = -1;
         indexes[1] = -1;
         return 0f;
@@ -496,7 +491,7 @@ class SeparationFunction {
     m_sweepB.getTransform(xfb, t);
 
     switch (m_type) {
-      case POINTS: {
+      case Type.POINTS: {
         Rot.mulTransUnsafe(xfa.q, m_axis, axisA);
         Rot.mulTransUnsafe(xfb.q, m_axis.negateLocal(), axisB);
         m_axis.negateLocal();
@@ -510,7 +505,8 @@ class SeparationFunction {
         float separation = Vec2.dot(pointB.subLocal(pointA), m_axis);
         return separation;
       }
-      case FACE_A: {
+      case Type.FACE_A:
+          {
         // System.out.printf("We're faceA");
         Rot.mulToOutUnsafe(xfa.q, m_axis, normal);
         Transform.mulToOutUnsafe(xfa, m_localPoint, pointA);
@@ -523,7 +519,8 @@ class SeparationFunction {
         float separation = Vec2.dot(pointB.subLocal(pointA), normal);
         return separation;
       }
-      case FACE_B: {
+      case Type.FACE_B:
+          {
         // System.out.printf("We're faceB");
         Rot.mulToOutUnsafe(xfb.q, m_axis, normal);
         Transform.mulToOutUnsafe(xfb, m_localPoint, pointB);
@@ -538,7 +535,6 @@ class SeparationFunction {
         return separation;
       }
       default:
-        assert (false);
         return 0f;
     }
   }

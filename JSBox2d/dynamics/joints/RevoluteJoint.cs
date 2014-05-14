@@ -24,17 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.Mat33;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.common.Vec3;
-using org.jbox2d.dynamics.Body;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-//Point-to-point constraint
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.dynamics;using org.jbox2d.pooling;//Point-to-point constraint
 //C = p2 - p1
 //Cdot = v2 - v1
 //   = v2 + cross(w2, r2) - v1 - cross(w1, r1)
@@ -89,8 +79,9 @@ public class RevoluteJoint : Joint {
   private float m_motorMass; // effective mass for motor/limit angular constraint.
   private LimitState m_limitState;
 
-  public RevoluteJoint(IWorldPool argWorld, RevoluteJointDef def) {
-    super(argWorld, def);
+  public RevoluteJoint(IWorldPool argWorld, RevoluteJointDef def)
+      : base(argWorld, def)
+  { 
     m_localAnchorA.set(def.localAnchorA);
     m_localAnchorB.set(def.localAnchorB);
     m_referenceAngle = def.referenceAngle;
@@ -543,7 +534,6 @@ public class RevoluteJoint : Joint {
   }
 
   public void setLimits( float lower,  float upper) {
-    assert (lower <= upper);
     if (lower != m_lowerAngle || upper != m_upperAngle) {
       m_bodyA.setAwake(true);
       m_bodyB.setAwake(true);

@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-
+using org.jbox2d.common;
 // updated to rev 100
 /**
  * Ray-cast input data. The ray : from p1 to p1 + maxFraction * (p2 - p1).

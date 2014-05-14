@@ -27,10 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Settings;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.Body;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;/**
  * Pulley joint definition. This requires two ground anchors, two dynamic body anchor points, and a
  * pulley ratio.
  * 
@@ -101,7 +98,6 @@ public class PulleyJointDef : JointDef {
     Vec2 d2 = anchor2.sub(ga2);
     lengthB = d2.length();
     ratio = r;
-    assert (ratio > Settings.EPSILON);
   }
 }
 }

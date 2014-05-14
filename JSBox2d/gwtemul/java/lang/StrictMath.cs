@@ -26,6 +26,9 @@
 /**
  * GWT doesn't support strict math, so we "emulate" it with non-strict math.
  */
+
+using System;
+
 namespace java.lang {
 public class StrictMath {
 
@@ -38,7 +41,7 @@ public class StrictMath {
   }
 
   public static int round(float a){
-    return Math.Round(a);
+    return (int) Math.Round(a);
   }
 
   public static double sin(double a){

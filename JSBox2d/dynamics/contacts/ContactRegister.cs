@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.pooling.IDynamicStack;
-
+using org.jbox2d.pooling;
 namespace org.jbox2d.dynamics.contacts {
 public class ContactRegister {
   public IDynamicStack<Contact> creator;

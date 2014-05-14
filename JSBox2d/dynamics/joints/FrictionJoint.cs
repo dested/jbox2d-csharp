@@ -27,13 +27,7 @@
 
 
 using System;
-using org.jbox2d.common.Mat22;
-using org.jbox2d.common.MathUtils;
-using org.jbox2d.common.Rot;
-using org.jbox2d.common.Vec2;
-using org.jbox2d.dynamics.SolverData;
-using org.jbox2d.pooling.IWorldPool;
-/**
+using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.common;using org.jbox2d.dynamics;using org.jbox2d.pooling;/**
  * @author Daniel Murphy
  */
 namespace org.jbox2d.dynamics.joints {
@@ -62,8 +56,9 @@ public class FrictionJoint : Joint {
   private readonly Mat22 m_linearMass = new Mat22();
   private float m_angularMass;
 
-  public FrictionJoint(IWorldPool argWorldPool, FrictionJointDef def) {
-    super(argWorldPool, def);
+  public FrictionJoint(IWorldPool argWorldPool, FrictionJointDef def)
+      : base(argWorldPool, def)
+  { 
     m_localAnchorA = new Vec2(def.localAnchorA);
     m_localAnchorB = new Vec2(def.localAnchorB);
 
@@ -103,7 +98,6 @@ public class FrictionJoint : Joint {
   }
 
   public void setMaxForce(float force) {
-    assert (force >= 0.0f);
     m_maxForce = force;
   }
 
@@ -112,7 +106,6 @@ public class FrictionJoint : Joint {
   }
 
   public void setMaxTorque(float torque) {
-    assert (torque >= 0.0f);
     m_maxTorque = torque;
   }
 
@@ -202,7 +195,6 @@ public class FrictionJoint : Joint {
     }
 //    data.velocities[m_indexA].v.set(vA);
     if( data.velocities[m_indexA].w != wA) {
-      assert(data.velocities[m_indexA].w != wA);
     }
     data.velocities[m_indexA].w = wA;
 //    data.velocities[m_indexB].v.set(vB);
@@ -278,7 +270,6 @@ public class FrictionJoint : Joint {
 
 //    data.velocities[m_indexA].v.set(vA);
     if( data.velocities[m_indexA].w != wA) {
-      assert(data.velocities[m_indexA].w != wA);
     }
     data.velocities[m_indexA].w = wA;
    

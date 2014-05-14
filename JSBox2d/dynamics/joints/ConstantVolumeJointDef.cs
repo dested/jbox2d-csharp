@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.dynamics.Body;
-using System.Collections.Generic;
+using org.jbox2d.dynamics;using System.Collections.Generic;
 using System.Collections;
 /**
  * Definition for a {@link ConstantVolumeJoint}, which connects a group a bodies together so they
@@ -36,12 +35,12 @@ public class ConstantVolumeJointDef : JointDef {
   public float frequencyHz;
   public float dampingRatio;
 
-  ArrayList<Body> bodies;
-  ArrayList<DistanceJoint> joints;
+  public List<Body> bodies;
+  public List<DistanceJoint> joints;
 
   public ConstantVolumeJointDef() {
     type = JointType.CONSTANT_VOLUME;
-    bodies = new ArrayList<Body>();
+    bodies = new List<Body>();
     joints = null;
     collideConnected = false;
     frequencyHz = 0.0f;
@@ -54,11 +53,11 @@ public class ConstantVolumeJointDef : JointDef {
    * @param argBody
    */
   public void addBody(Body argBody) {
-    bodies.add(argBody);
-    if (bodies.size() == 1) {
+    bodies.Add(argBody);
+    if (bodies.Count == 1) {
       bodyA = argBody;
     }
-    if (bodies.size() == 2) {
+    if (bodies.Count == 2) {
       bodyB = argBody;
     }
   }
@@ -69,9 +68,9 @@ public class ConstantVolumeJointDef : JointDef {
   public void addBodyAndJoint(Body argBody, DistanceJoint argJoint) {
     addBody(argBody);
     if (joints == null) {
-      joints = new ArrayList<DistanceJoint>();
+      joints = new List<DistanceJoint>();
     }
-    joints.add(argJoint);
+    joints.Add(argJoint);
   }
 }
 }

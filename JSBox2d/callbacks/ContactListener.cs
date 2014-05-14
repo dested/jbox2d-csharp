@@ -24,9 +24,7 @@
 
 
 using System;
-using org.jbox2d.collision.Manifold;
-using org.jbox2d.dynamics.contacts.Contact;
-// updated to rev 100
+using org.jbox2d.collision;using org.jbox2d.dynamics.contacts;// updated to rev 100
 /**
  * Implement this class to get contact information. You can use these results for
  * things like sounds and game logic. You can also get contact results by
@@ -42,20 +40,15 @@ using org.jbox2d.dynamics.contacts.Contact;
  */
 namespace org.jbox2d.callbacks {
 public interface ContactListener {
-
-	/**
+/**
 	 * Called when two fixtures begin to touch.
 	 * @param contact
 	 */
-	public void beginContact(Contact contact);
-	
-	/**
+	void beginContact(Contact contact);/**
 	 * Called when two fixtures cease to touch.
 	 * @param contact
 	 */
-	public void endContact(Contact contact);
-	
-	/**
+	void endContact(Contact contact);/**
 	 * This is called after a contact is updated. This allows you to inspect a
 	 * contact before it goes to the solver. If you are careful, you can modify the
 	 * contact manifold (e.g. disable contact).
@@ -71,9 +64,7 @@ public interface ContactListener {
 	 * @param contact
 	 * @param oldManifold
 	 */
-	public void preSolve(Contact contact, Manifold oldManifold);
-	
-	/**
+	void preSolve(Contact contact, Manifold oldManifold);/**
 	 * This lets you inspect a contact after the solver is finished. This is useful
 	 * for inspecting impulses.
 	 * Note: the contact manifold does not include time of impact impulses, which can be
@@ -84,6 +75,5 @@ public interface ContactListener {
 	 * @param impulse this is usually a pooled variable, so it will be modified after
 	 * this call
 	 */
-	public void postSolve(Contact contact, ContactImpulse impulse);
-}
+	void postSolve(Contact contact, ContactImpulse impulse);}
 }

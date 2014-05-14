@@ -32,7 +32,7 @@ using System.IO;
  * must interpolate the center of mass position.
  */
 namespace org.jbox2d.common {
-public class Sweep : Serializable {
+public class Sweep {
   private static readonly long serialVersionUID = 1L;
 
   /** Local center of mass position */
@@ -80,7 +80,6 @@ public class Sweep : Serializable {
    * @param t the normalized time in [0,1].
    */
   public  void getTransform( Transform xf,  float beta) {
-    assert (xf != null);
     // if (xf == null)
     // xf = new XForm();
     // center = p + R * localCenter
@@ -110,7 +109,6 @@ public class Sweep : Serializable {
    * @param alpha the new initial time.
    */
   public  void advance( float alpha) {
-//    assert (alpha0 < 1f);
 //    // c0 = (1.0f - t) * c0 + t*c;
 //    float beta = (alpha - alpha0) / (1.0f - alpha0);
 //    c0.x = (1.0f - beta) * c0.x + beta * c.x;

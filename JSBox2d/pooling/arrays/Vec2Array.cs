@@ -24,8 +24,7 @@
 
 
 using System;
-using org.jbox2d.common.Vec2;
-using System.Collections.Generic;
+using org.jbox2d.common;using System.Collections.Generic;
 using System.Collections;
 /**
  * not thread safe Vec2[] pool
@@ -35,21 +34,20 @@ using System.Collections;
 namespace org.jbox2d.pooling.arrays {
 public class Vec2Array {
 
-	private readonly Hashtable<int?, Vec2[]> map = new Hashtable<int?, Vec2[]>();
+	private readonly Dictionary<int, Vec2[]> map = new Dictionary<int, Vec2[]>();
 	
 	public Vec2[] get( int argLength){
-		assert(argLength > 0);
 		
-		if(!map.containsKey(argLength)){
-			map.put(argLength, getInitializedArray(argLength));
+		if(!map.ContainsKey(argLength)){
+			map[argLength]=getInitializedArray(argLength);
 		}
-		
-		return map.get(argLength);
+
+        return map[argLength];
 	}
 	
 	public Vec2[] getInitializedArray(int argLength){
 		 Vec2[] ray = new Vec2[argLength];
-		for (int i = 0; i < ray.length; i++) {
+		for (int i = 0; i < ray.Length; i++) {
 			ray[i] = new Vec2();
 		}
 		return ray;

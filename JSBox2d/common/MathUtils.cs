@@ -49,10 +49,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
-
 /**
  * A few math methods that don't fit very well anywhere else.
  */
+using java.lang;
+
 namespace org.jbox2d.common {
 public class MathUtils : PlatformMathUtils {
   public static readonly float PI = (float) Math.PI;
@@ -107,13 +108,13 @@ public class MathUtils : PlatformMathUtils {
 
       // the next index is 0
       if (index == Settings.SINCOS_LUT_LENGTH - 1) {
-        return ((1 - x) * sinLUT[index] + x * sinLUT[0]);
+          return ((1 - x) * sinLUT2[index] + x * sinLUT2[0]);
       } else {
-        return ((1 - x) * sinLUT[index] + x * sinLUT[index + 1]);
+          return ((1 - x) * sinLUT2[index] + x * sinLUT2[index + 1]);
       }
 
     } else {
-      return sinLUT[MathUtils.round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
+        return sinLUT2[MathUtils.round(x / Settings.SINCOS_LUT_PRECISION) % Settings.SINCOS_LUT_LENGTH];
     }
   }
 
@@ -229,7 +230,7 @@ public class MathUtils : PlatformMathUtils {
   }
 
   /**
-   * Next Largest Power of 2: Given a binary integer value x, the next largest power of 2 can be
+   * Next Largest Power of 2: Given a binary int value x, the next largest power of 2 can be
    * computed by a SWAR algorithm that recursively "folds" the upper bits into the lower bits. This
    * process yields a bit vector with the same most significant 1 as x, but all 1's below it. Adding
    * 1 to that value yields the next largest power of 2.
@@ -287,12 +288,13 @@ public class MathUtils : PlatformMathUtils {
     return theta;
   }
 
+    public static Random random=new Random();
   public static  float randomFloat(float argLow, float argHigh) {
-    return (float) Math.random() * (argHigh - argLow) + argLow;
+      return (float)random.Next() * (argHigh - argLow) + argLow;
   }
 
   public static  float randomFloat(Random r, float argLow, float argHigh) {
-    return r.nextFloat() * (argHigh - argLow) + argLow;
+    return r.Next() * (argHigh - argLow) + argLow;
   }
 
   public static  float sqrt(float x) {

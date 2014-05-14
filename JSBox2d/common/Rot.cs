@@ -32,7 +32,7 @@ using System.IO;
  * @author Daniel
  */
 namespace org.jbox2d.common {
-public class Rot : Serializable {
+public class Rot {
   private static readonly long serialVersionUID = 1L;
 
   public float s, c; // sin and cos
@@ -50,7 +50,7 @@ public class Rot : Serializable {
   }
 
   
-  public override string toString() {
+  public override string ToString() {
     return "Rot(s:" + s + ", c:" + c + ")";
   }
 
@@ -103,8 +103,6 @@ public class Rot : Serializable {
   }
 
   public static  void mulUnsafe(Rot q, Rot r, Rot out_) {
-    assert (r != out_);
-    assert (q != out_);
     // [qc -qs] * [rc -rs] = [qc*rc-qs*rs -qc*rs-qs*rc]
     // [qs qc] [rs rc] [qs*rc+qc*rs -qs*rs+qc*rc]
     // s = qs * rc + qc * rs
